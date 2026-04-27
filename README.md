@@ -1,78 +1,93 @@
-#  Growfico - Your Digital Gardening Companion
+# Growfico - Your Digital Gardening Companion
 
-**Growfico** is a comprehensive React Native application designed to empower gardening enthusiasts. Whether you're a beginner looking for courses or an experienced gardener seeking quality products, Growfico provides a seamless platform to transform and manage your garden.
-
----
-
-##  Key Features
-
-- **Secure Authentication**: Integrated with **Firebase** and **Google Sign-In** for easy and secure access.
-- **Dynamic Home Screen**: Personalized welcome messages and featured banners using a robust Redux-managed state.
-- **Product Showcase**: Explore a wide range of gardening products with an interactive carousel and detailed product cards.
-- **Gardening Courses**: Access educational content to help your garden thrive.
-- **User Profiles**: Manage your personal information and preferences.
-- **Multi-Region Support**: Features content tailored for local regions like Negros Oriental.
-- **Offline-Ready State**: Powered by **Redux-Saga** and **Redux-Persist** for a consistent experience even without connectivity.
+**Growfico** is a sophisticated React Native application designed to empower gardening enthusiasts. Whether you're a beginner looking for courses or an experienced gardener seeking quality products, Growfico provides a seamless, high-performance platform to manage and transform your green spaces.
 
 ---
 
-##  Tech Stack
+## 🌟 Key Features
 
-### Frontend & Framework
-- **React Native (v0.83.1)**: Building a cross-platform mobile experience.
-- **TypeScript**: Ensuring type safety and better developer productivity.
-- **React Navigation**: Seamless routing between Home, Product, and Course screens.
+- **Secure & Social Authentication**: Integrated with **Firebase** and **Google Sign-In**, offering both traditional and social login flows with smooth transitions.
+- **Dynamic User Experience**: Personalized home screen with featured banners, intuitive search, and region-specific content.
+- **Interactive Product Ecosystem**: Detailed product showcase featuring interactive carousels, filterable categories (FilterChips), and comprehensive product cards.
+- **Educational Courses**: Curated gardening content and courses to help users develop their green thumb.
+- **Advanced Navigation Flow**: custom-built animated loading screens for login (`ProcessNav`) and logout (`ReleaseNav`) sequences, plus a robust error handling navigation (`ErrorNav`).
+- **Real-Time Data Management**: Powered by **Redux-Saga** for complex asynchronous side effects (API, Auth, Products, Stocks).
+- **Modern UI Architecture**: Built with a focus on aesthetics, utilizing custom **Poppins** typography and a rich library of reusable components.
 
-### State Management & Storage
-- **Redux & React-Redux**: Centralized state management for application-wide data.
-- **Redux-Saga**: Handling asynchronous side effects and API communication.
-- **API-Driven Architecture**: All data is fetched and managed through the Symfony backend, ensuring a single source of truth without local persistence.
+---
+
+## 🛠 Tech Stack
+
+### Core Framework
+- **React Native (v0.83.1)**: Leveraging the latest features for a high-performance cross-platform experience.
+- **TypeScript**: Full type safety across the application for better maintainability and developer experience.
+
+### State Management & Side Effects
+- **Redux & React-Redux**: Centralized state management for global application data.
+- **Redux-Saga**: Handling complex asynchronous operations like authentication flows and multi-endpoint data fetching.
+- **AuthContext**: Custom context provider for managing session-wide authentication states.
+
+### Navigation
+- **React Navigation (v7)**: 
+  - **Stack Navigation**: Modularized stacks for Auth, Main, and specialized flows.
+  - **Bottom Tabs**: Intuitive primary navigation for core app features.
+  - **Custom Flow Controllers**: specialized navigators for processing states and errors.
 
 ### Backend & Infrastructure
-- **Symfony (PHP)**: Powering the RESTful API with robust security and data management.
-- **Docker**: Containerized environment for consistent deployment and local development.
-- **Firebase**: Integration for social authentication and cloud services.
-- **MariaDB/MySQL**: Managed via Symfony/Docker for secure and scalable data storage.
+- **Firebase**: Powering authentication services.
+- **Symfony (PHP)**: RESTful API backend (managed via Docker) for product, stock, and user data.
+- **Google Sign-In**: Seamless third-party authentication integration.
 
-### UI & UX
-- **React Native Elements**: High-quality UI components for a consistent look.
-- **Vector Icons**: Customizable icons to enhance navigation and visual appeal.
-- **Lottie/Modals**: Engaging user feedback and interactive modals.
-- **Poppins Font Family**: Custom typography for a modern and clean aesthetic.
-
-### API Reference
-The application integrates with a RESTful API to manage dynamic content and user data.
-- **Base URL**: `http://127.0.0.1:8000/api` (Local Development)
-- **Authentication**: JWT-based security for protected routes (`/products`, `/users`, `/stocks`).
-- **Endpoints**:
-    - `POST /login`: User authentication.
-    - `POST /register`: New user registration.
-    - `GET /products`: Fetching available gardening items.
-    - `GET /stocks`: Real-time stock tracking.
-    - `GET /users`: User directory and profile data.
+### UI & UX Components
+- **React Native Elements**: High-quality UI primitives.
+- **Vector Icons**: Comprehensive iconography support.
+- **Custom Typography**: Integrated Poppins font family (Thin to Black).
+- **Interactive Modals**: Enhanced user feedback using `react-native-modal`.
 
 ---
 
-## Project Structure
+## 📂 Project Structure
 
 ```text
 src/
-├── App/                # Redux store, actions, reducers, and sagas
-├── assets/             # Images, custom Poppins fonts, and icons
-├── components/         # Reusable UI components (CustomButton, Banner, etc.)
-├── navigations/        # Navigation stacks (Auth, Main, Tab, Process)
-├── screens/            # Application screens (Home, Profile, Product, Courses)
-└── utils/              # Helper functions, routes, and image constants
+├── App/                # Core Redux Logic
+│   ├── actions.ts      # Action creators and type definitions
+│   ├── api/            # API service layers (Auth, Products, etc.)
+│   ├── reducers/       # State reducers (Auth, Root)
+│   └── sagas/          # Side effect handlers (Redux-Saga)
+├── assets/             # Static Assets
+│   ├── fonts/          # Custom Poppins Font Family
+│   └── images/         # Brand logos, banners, and UI decorations
+├── components/         # Atomic & Molecular UI Components
+│   ├── Banner.tsx      # Promotional banners
+│   ├── FilterChips.tsx # Category filtering chips
+│   ├── ProductCard.tsx # Detailed product displays
+│   └── CustomSearchbar # Interactive search interface
+├── navigations/        # Navigation Architecture
+│   ├── AuthNav.tsx     # Authentication entry flows
+│   ├── TabNav.tsx      # Main application dashboard
+│   ├── ProcessNav.tsx  # Animated login transition
+│   └── ReleaseNav.tsx  # Animated logout transition
+├── screens/            # Application Screens
+│   ├── auth/           # Login & Registration screens
+│   ├── HomeScreen.tsx  # Landing dashboard
+│   ├── ProductScreen   # Marketplace & Product details
+│   └── ProfileScreen   # User settings & Profile management
+└── utils/              # System Utilities
+    ├── AuthContext.tsx # Authentication state provider
+    ├── image.ts        # Centralized image mapping
+    └── types.ts        # Global TypeScript interfaces
 ```
 
 ---
 
-## Getting Started
+## 🚀 Getting Started
 
 ### Prerequisites
 - [Node.js](https://nodejs.org/) (>= 20)
 - [React Native CLI](https://reactnative.dev/docs/environment-setup)
 - Android SDK / Xcode for iOS
+- CocoaPods (for iOS)
 
 ### Installation
 
@@ -87,7 +102,7 @@ src/
    npm install
    ```
 
-3. **iOS Specific (macOS only):**
+3. **iOS Specific Setup:**
    ```bash
    cd ios && pod install && cd ..
    ```
@@ -111,17 +126,31 @@ src/
 
 ---
 
-## Visuals & Branding
+## 🔗 API Integration
 
-Growfico uses a natural, green-themed color palette to match its gardening focus.
-- **Fonts**: Poppins (Regular, Medium, SemiBold, Bold)
-- **Logos**: Located in `src/assets/images/`
+The application communicates with a Symfony-based REST API for dynamic content.
+- **Base URL**: `http://127.0.0.1:8000/api`
+- **Protected Endpoints**:
+    - `POST /login`: JWT authentication.
+    - `POST /register`: User onboarding.
+    - `GET /products`: Real-time gardening catalog.
+    - `GET /stocks`: Inventory tracking.
+    - `GET /users`: Profile data retrieval.
 
 ---
 
-## License
+## 🎨 Branding
 
-This project is private and intended for educational/developmental purposes.
+Growfico features a nature-inspired design system:
+- **Primary Color Palette**: Shades of Emerald and Forest Green.
+- **Typography**: Poppins (Custom implementation for all font weights).
+- **Visuals**: High-quality gardening imagery located in `src/assets/images/`.
+
+---
+
+## 📜 License
+
+This project is private and intended for educational and developmental purposes.
 
 ---
 
