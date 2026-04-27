@@ -1,8 +1,22 @@
 {
-  "extends": "@react-native/typescript-config",
+  "extends": "./node_modules/@react-native/typescript-config/tsconfig.json",
   "compilerOptions": {
-    "types": ["jest"],
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"]
+    },
+    "jsx": "react-native",
+    "strict": true,
+    "allowJs": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true,
+    "noEmit": true
   },
-  "include": ["**/*.ts", "**/*.tsx", "App.js"],
-  "exclude": ["**/node_modules", "**/Pods"]
+  "include": [
+    "src/**/*",
+    "index.js",
+    "App.tsx"
+  ]
 }

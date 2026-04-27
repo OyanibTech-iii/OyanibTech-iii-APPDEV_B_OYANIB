@@ -1,97 +1,128 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+#  Growfico - Your Digital Gardening Companion
 
-# Getting Started
+**Growfico** is a comprehensive React Native application designed to empower gardening enthusiasts. Whether you're a beginner looking for courses or an experienced gardener seeking quality products, Growfico provides a seamless platform to transform and manage your garden.
 
-> **Note**: Make sure you have completed the [Set Up Your Environment](https://reactnative.dev/docs/set-up-your-environment) guide before proceeding.
+---
 
-## Step 1: Start Metro
+##  Key Features
 
-First, you will need to run **Metro**, the JavaScript build tool for React Native.
+- **Secure Authentication**: Integrated with **Firebase** and **Google Sign-In** for easy and secure access.
+- **Dynamic Home Screen**: Personalized welcome messages and featured banners using a robust Redux-managed state.
+- **Product Showcase**: Explore a wide range of gardening products with an interactive carousel and detailed product cards.
+- **Gardening Courses**: Access educational content to help your garden thrive.
+- **User Profiles**: Manage your personal information and preferences.
+- **Multi-Region Support**: Features content tailored for local regions like Negros Oriental.
+- **Offline-Ready State**: Powered by **Redux-Saga** and **Redux-Persist** for a consistent experience even without connectivity.
 
-To start the Metro dev server, run the following command from the root of your React Native project:
+---
 
-```sh
-# Using npm
-npm start
+##  Tech Stack
 
-# OR using Yarn
-yarn start
+### Frontend & Framework
+- **React Native (v0.83.1)**: Building a cross-platform mobile experience.
+- **TypeScript**: Ensuring type safety and better developer productivity.
+- **React Navigation**: Seamless routing between Home, Product, and Course screens.
+
+### State Management & Storage
+- **Redux & React-Redux**: Centralized state management for application-wide data.
+- **Redux-Saga**: Handling asynchronous side effects and API communication.
+- **API-Driven Architecture**: All data is fetched and managed through the Symfony backend, ensuring a single source of truth without local persistence.
+
+### Backend & Infrastructure
+- **Symfony (PHP)**: Powering the RESTful API with robust security and data management.
+- **Docker**: Containerized environment for consistent deployment and local development.
+- **Firebase**: Integration for social authentication and cloud services.
+- **MariaDB/MySQL**: Managed via Symfony/Docker for secure and scalable data storage.
+
+### UI & UX
+- **React Native Elements**: High-quality UI components for a consistent look.
+- **Vector Icons**: Customizable icons to enhance navigation and visual appeal.
+- **Lottie/Modals**: Engaging user feedback and interactive modals.
+- **Poppins Font Family**: Custom typography for a modern and clean aesthetic.
+
+### API Reference
+The application integrates with a RESTful API to manage dynamic content and user data.
+- **Base URL**: `http://127.0.0.1:8000/api` (Local Development)
+- **Authentication**: JWT-based security for protected routes (`/products`, `/users`, `/stocks`).
+- **Endpoints**:
+    - `POST /login`: User authentication.
+    - `POST /register`: New user registration.
+    - `GET /products`: Fetching available gardening items.
+    - `GET /stocks`: Real-time stock tracking.
+    - `GET /users`: User directory and profile data.
+
+---
+
+## Project Structure
+
+```text
+src/
+├── App/                # Redux store, actions, reducers, and sagas
+├── assets/             # Images, custom Poppins fonts, and icons
+├── components/         # Reusable UI components (CustomButton, Banner, etc.)
+├── navigations/        # Navigation stacks (Auth, Main, Tab, Process)
+├── screens/            # Application screens (Home, Profile, Product, Courses)
+└── utils/              # Helper functions, routes, and image constants
 ```
 
-## Step 2: Build and run your app
+---
 
-With Metro running, open a new terminal window/pane from the root of your React Native project, and use one of the following commands to build and run your Android or iOS app:
+## Getting Started
 
-### Android
+### Prerequisites
+- [Node.js](https://nodejs.org/) (>= 20)
+- [React Native CLI](https://reactnative.dev/docs/environment-setup)
+- Android SDK / Xcode for iOS
 
-```sh
-# Using npm
-npm run android
+### Installation
 
-# OR using Yarn
-yarn android
-```
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/OyanibTech-iii/GrowficoMobile.git
+   cd APPDEV_B_SY25226
+   ```
 
-### iOS
+2. **Install dependencies:**
+   ```bash
+   npm install
+   ```
 
-For iOS, remember to install CocoaPods dependencies (this only needs to be run on first clone or after updating native deps).
+3. **iOS Specific (macOS only):**
+   ```bash
+   cd ios && pod install && cd ..
+   ```
 
-The first time you create a new project, run the Ruby bundler to install CocoaPods itself:
+### Running the App
 
-```sh
-bundle install
-```
+- **Start Metro Bundler:**
+  ```bash
+  npm start
+  ```
 
-Then, and every time you update your native dependencies, run:
+- **Run on Android:**
+  ```bash
+  npm run android
+  ```
 
-```sh
-bundle exec pod install
-```
+- **Run on iOS:**
+  ```bash
+  npm run ios
+  ```
 
-For more information, please visit [CocoaPods Getting Started guide](https://guides.cocoapods.org/using/getting-started.html).
+---
 
-```sh
-# Using npm
-npm run ios
+## Visuals & Branding
 
-# OR using Yarn
-yarn ios
-```
+Growfico uses a natural, green-themed color palette to match its gardening focus.
+- **Fonts**: Poppins (Regular, Medium, SemiBold, Bold)
+- **Logos**: Located in `src/assets/images/`
 
-If everything is set up correctly, you should see your new app running in the Android Emulator, iOS Simulator, or your connected device.
+---
 
-This is one way to run your app — you can also build it directly from Android Studio or Xcode.
+## License
 
-## Step 3: Modify your app
+This project is private and intended for educational/developmental purposes.
 
-Now that you have successfully run the app, let's make changes!
+---
 
-Open `App.tsx` in your text editor of choice and make some changes. When you save, your app will automatically update and reflect these changes — this is powered by [Fast Refresh](https://reactnative.dev/docs/fast-refresh).
-
-When you want to forcefully reload, for example to reset the state of your app, you can perform a full reload:
-
-- **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Dev Menu**, accessed via <kbd>Ctrl</kbd> + <kbd>M</kbd> (Windows/Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (macOS).
-- **iOS**: Press <kbd>R</kbd> in iOS Simulator.
-
-## Congratulations! :tada:
-
-You've successfully run and modified your React Native App. :partying_face:
-
-### Now what?
-
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [docs](https://reactnative.dev/docs/getting-started).
-
-# Troubleshooting
-
-If you're having issues getting the above steps to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
-
-# Learn More
-
-To learn more about React Native, take a look at the following resources:
-
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+*Growfico Founder - Pacifico M. Oyanib III*

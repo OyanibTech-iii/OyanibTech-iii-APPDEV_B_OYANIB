@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1059016108118",
+    "project_id": "growfico-official",
+    "storage_bucket": "growfico-official.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1059016108118:android:537513a2590d3fc32373f7",
+        "android_client_info": {
+          "package_name": "com.appdevsectionb"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1059016108118-ra4ljvtgf8q8etespns2bpf3b4ekqut1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBVar8nZV3ksQhUZUICcFiVjKxJyk5ti1M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1059016108118-ra4ljvtgf8q8etespns2bpf3b4ekqut1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

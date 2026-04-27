@@ -1,0 +1,180 @@
+import React, { useContext, useEffect, useMemo } from 'react';
+import { Image, Text, View, TouchableOpacity, ScrollView } from 'react-native';
+import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
+import { useDispatch, useSelector } from 'react-redux';
+import { GET_USERS_REQUEST } from '../App/actions';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import CustomFooter from '../components/CustomFooter';
+import CustomMeatball from '../components/CustomMeatball';
+import { AuthContext } from '../utils/AuthContext';
+import { RootState, User } from '../utils/types';
+
+const ProfileScreen = () => {
+  const dispatch = useDispatch();
+  const authContext = useContext(AuthContext);
+  const user = authContext?.user;
+  const token = useSelector((state: RootState) => state.auth.token);
+  const usersSlice = useSelector((state: RootState) => state.auth.users);
+  const tabBarHeight = useBottomTabBarHeight();
+
+  useEffect(() => {
+    if (token) {
+      dispatch({ type: GET_USERS_REQUEST, payload: token });
+    }
+  }, [dispatch, token]);
+
+  const currentUser: User | any = useMemo(() => {
+    const normalizeList = (slice: User[] | any) => {
+      if (Array.isArray(slice)) return slice;
+      if (slice && Array.isArray(slice.data)) return slice.data;
+      if (slice && Array.isArray(slice.results)) return slice.results;
+      if (slice && Array.isArray(slice['hydra:member'])) return slice['hydra:member'];
+      return [];
+    };
+
+    const users = normalizeList(usersSlice);
+    const loginUser: any = user || {};
+    const loginEmail = loginUser.email || loginUser.username || '';
+
+    const matched =
+      users.find((item: User) => {
+        const apiEmail = item?.email || item?.username || '';
+        return apiEmail && loginEmail && apiEmail === loginEmail;
+      }) || loginUser;
+
+    return matched || {};
+  }, [user, usersSlice]);
+
+  const fullName = useMemo(() => {
+    const firstName = currentUser.firstName || currentUser.first_name || '';
+    const lastName = currentUser.lastName || currentUser.last_name || '';
+    const combined = `${firstName} ${lastName}`.trim();
+    return combined || currentUser.username || currentUser.email || 'User';
+  }, [currentUser]);
+
+  const roleLabel = useMemo(() => {
+    if (Array.isArray(currentUser.roles) && currentUser.roles.length > 0) {
+      return String(currentUser.roles[0]).replace('ROLE_', '').toLowerCase();
+    }
+    return 'User';
+  }, [currentUser]);
+
+  const avatarUri = useMemo(() => {
+    return (
+      currentUser.avatar ||
+      currentUser.avatarUrl ||
+      currentUser.profileImage ||
+      currentUser.profile_image ||
+      null
+    );
+  }, [currentUser]);
+
+  const initialLetter = useMemo(() => {
+    const source =
+      currentUser.lastName ||
+      currentUser.last_name ||
+      currentUser.firstName ||
+      currentUser.first_name ||
+      currentUser.username ||
+      currentUser.email ||
+      'U';
+
+    return String(source).trim().charAt(0).toUpperCase() || 'U';
+  }, [currentUser]);
+
+  return (
+    <View style={{ flex: 1, marginBottom: 70 }}>   
+      <CustomMeatball />
+      <ScrollView contentContainerStyle={{ paddingBottom: tabBarHeight + 20 }}>
+        <View style={{ alignItems: 'center', marginTop: 10 }}>
+          <View style={{
+            width: 100,
+            height: 100,
+            borderRadius: 65,
+            backgroundColor: '#f8fafc',
+            padding: 3,
+            justifyContent: 'center',
+            alignItems: 'center',
+            borderWidth: 1,
+            borderColor: '#e2e8f0'
+          }}>
+            {avatarUri ? (
+              <Image
+                source={{ uri: avatarUri }}
+                resizeMode='cover'
+                style={{ width: 100, height: 100, borderRadius: 50 }}
+              />
+            ) : (
+              <View
+                style={{
+                  width: 100,
+                  height: 100,
+                  borderRadius: 50,
+                  backgroundColor: '#1f6908',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}
+              >
+                <Text style={{ color: '#ffffff', fontSize: 34, fontFamily: 'Poppins-Bold' }}>
+                  {initialLetter}
+                </Text>
+              </View>
+            )}
+          </View>
+          <Text style={{ color: '#044b31', fontSize: 20, fontFamily: 'Poppins-Regular', marginTop: 15 }}>{fullName}</Text>
+          <Text style={{ color: '#64748b', fontSize: 12, fontFamily: 'Poppins-Regular' }}>{roleLabel}</Text>
+        </View>
+
+        <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', marginTop: 30, paddingHorizontal: 10 }}>
+          {[
+            { icon: 'camera-outline', label: 'Set Photo' },
+            { icon: 'pencil-outline', label: 'Edit Info' },
+            { icon: 'settings-outline', label: 'Settings' }
+          ].map((item, index) => (
+            <TouchableOpacity
+              key={index}
+              style={{
+                width: '28%',
+                backgroundColor: '#ffffff',
+                padding: 15,
+                borderRadius: 15,
+                alignItems: 'center',
+                borderWidth: 1,
+                borderColor: '#e2e8f0'
+              }}
+            >
+              <Ionicons name={item.icon} size={20} color="#1e293b" />
+              <Text style={{ color: '#1e293b', fontSize: 12, marginTop: 8, fontWeight: '500' }}>{item.label}</Text>
+            </TouchableOpacity>
+          ))}
+        </View>
+
+        <View style={{ flex: 1, backgroundColor: '#ffffff', margin: 20, borderRadius: 12, padding: 20 }}>
+          <View style={{ marginBottom: 20 }}>
+            <Text style={{ color: '#022e12', fontSize: 16 }}>
+              {currentUser.phone || currentUser.mobile || 'N/A'}
+            </Text>
+            <Text style={{ color: "#64748b", fontSize: 12, marginTop: 4 }}>Mobile</Text>
+          </View>
+
+          <View style={{ marginBottom: 20 }}>
+            <Text style={{ color: '#022e12', fontSize: 16 }}>
+              {currentUser.bio || 'No bio available'}
+            </Text>
+            <Text style={{ color: "#64748b", fontSize: 12, marginTop: 4 }}>Bio</Text>
+          </View>
+
+          <View>
+            <Text style={{ color: '#022e12', fontSize: 16 }}>
+              {currentUser.username || currentUser.email || 'N/A'}
+            </Text>
+            <Text style={{ color: "#64748b", fontSize: 12, marginTop: 4 }}>Email</Text>
+          </View>
+        </View>
+        <CustomFooter />
+      </ScrollView>
+    </View>
+  );
+};
+
+export default ProfileScreen;
