@@ -53,12 +53,13 @@ export function* userGoogleLoginAsync(): SagaIterator {
     
     // For now, let's treat the google user as the logged in user
     yield put({ type: USER_LOGIN_COMPLETED, payload: { user: userInfo.user, token: userInfo.idToken } });
-  } catch (error: any) {
-    if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+  } catch (error: unknown) {
+    const googleError = error as { code?: string; message?: string };
+    if (googleError.code === statusCodes.SIGN_IN_CANCELLED) {
       yield put({ type: USER_LOGIN_ERROR, payload: 'Google sign-in cancelled' });
-    } else if (error.code === statusCodes.IN_PROGRESS) {
+    } else if (googleError.code === statusCodes.IN_PROGRESS) {
       yield put({ type: USER_LOGIN_ERROR, payload: 'Google sign-in already in progress' });
-    } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+    } else if (googleError.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
       yield put({ type: USER_LOGIN_ERROR, payload: 'Play services not available' });
     } else {
       const errorMessage = error instanceof Error ? error.message : 'Google login failed';

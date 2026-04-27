@@ -9,7 +9,7 @@ import CustomFooter from '../../components/CustomFooter';
 import CheckBox from '@react-native-community/checkbox';
 import CustomModal from '../../components/CustomModal';
 import { userRegister, resetRegister } from '../../App/reducers/auth';
-import { RootState } from '../../utils/types';
+import { RootState, NavigationProp, RootStackParamList } from '../../utils/types';
 
 const Register = () => {
   const [password, setPassword] = useState('');
@@ -17,7 +17,7 @@ const Register = () => {
   const [email, setEmail] = useState('');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
-  const navigation = useNavigation<any>();
+  const navigation = useNavigation<NavigationProp>();
   const dispatch = useDispatch();
   const { registerData, registerLoading, registerError, registerErrorMessage } = useSelector((state: RootState) => state.auth);
   const [modalVisible, setModalVisible] = useState(false);
@@ -106,7 +106,7 @@ const Register = () => {
           setModalVisible(false);
           if (modalContent.type === 'success') {
             dispatch(resetRegister());
-            (navigation as any).navigate(ROUTES.LOGIN);
+            navigation.navigate(ROUTES.LOGIN as keyof RootStackParamList);
           }
         }}
       />
@@ -237,7 +237,7 @@ const Register = () => {
           <Text style={{ fontFamily: 'Poppins-Medium', color: '#0f3a03', fontSize: 12 }}>I agree to the</Text>
           <TouchableOpacity
             style={{ marginLeft: 5, }}
-            onPress={() => (navigation as any).navigate(ROUTES.TERMS_POLICY)}
+            onPress={() => navigation.navigate(ROUTES.TERMS_POLICY as keyof RootStackParamList)}
           >
             <Text style={{ color: '#1f6908', fontFamily: 'Poppins-Bold', letterSpacing: .5, fontSize: 12 }}>Terms and Privacy Policy</Text>
           </TouchableOpacity>
@@ -264,7 +264,7 @@ const Register = () => {
         <Text style={{ fontFamily: 'Poppins-Medium', color: '#0f3a03', fontSize: 12 }}>Already have an account?</Text>
         <TouchableOpacity
           style={{ marginLeft: 5 }}
-          onPress={() => (navigation as any).navigate(ROUTES.LOGIN)}
+          onPress={() => navigation.navigate(ROUTES.LOGIN as keyof RootStackParamList)}
         >
           <Text style={{ color: '#1f6908', fontFamily: 'Poppins-Bold', letterSpacing: .5, fontSize: 12 }}>Login</Text>
         </TouchableOpacity>

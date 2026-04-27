@@ -1,11 +1,24 @@
+import { StackNavigationProp } from '@react-navigation/stack';
+
 export interface User {
-  id?: number;
+  id?: number | string;
   email: string;
   username?: string;
   first_name?: string;
   last_name?: string;
   firstName?: string;
   lastName?: string;
+  roles?: string[];
+  avatar?: string;
+  avatarUrl?: string;
+  profileImage?: string;
+  profile_image?: string;
+  phone?: string;
+  mobile?: string;
+  bio?: string;
+  data?: User[];
+  results?: User[];
+  'hydra:member'?: User[];
 }
 
 export interface Product {
@@ -15,34 +28,42 @@ export interface Product {
   price: string | number;
   image?: string;
   stockType?: string;
+  isAvailable?: boolean;
+  currentStockQuantity?: number;
+  data?: Product[];
+  results?: Product[];
+  'hydra:member'?: Product[];
 }
 
 export interface Stock {
   id: number;
   stockType: string;
   quantity: number;
-  products: Product[] | number[];
+  products: (Product | number | string)[];
+  data?: Stock[];
+  results?: Stock[];
+  'hydra:member'?: Stock[];
 }
 
 export interface AuthState {
-  data: any | null; // Detailed user/auth data from login
+  data: AuthResponse | null; // Detailed user/auth data from login
   token: string | null;
   isLoading: boolean;
   isError: boolean;
   errorMessage: string;
-  registerData: any | null;
+  registerData: RegisterResponse | null;
   registerLoading: boolean;
   registerError: boolean;
   registerErrorMessage: string;
   products: Product[];
   productsLoading: boolean;
-  productsError: any | null;
+  productsError: string | null;
   stocks: Stock[];
   stocksLoading: boolean;
-  stocksError: any | null;
+  stocksError: string | null;
   users: User[];
   usersLoading: boolean;
-  usersError: any | null;
+  usersError: string | null;
 }
 
 export interface RootState {
@@ -63,3 +84,16 @@ export interface RegisterResponse {
   message?: string;
   user?: User;
 }
+
+export type RootStackParamList = {
+  Login: undefined;
+  Register: undefined;
+  Home: undefined;
+  Profile: undefined;
+  Product: { id: number } | undefined;
+  TermsPolicy: undefined;
+  Courses: undefined;
+  ErrorNav: undefined;
+};
+
+export type NavigationProp = StackNavigationProp<RootStackParamList>;

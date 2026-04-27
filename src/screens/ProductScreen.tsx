@@ -17,16 +17,16 @@ const ProductScreen = () => {
     const stocksSlice = useSelector((state: RootState) => state.auth.stocks);
     const productsLoading = useSelector((state: RootState) => state.auth.productsLoading);
 
-    const normalizeList = (slice: Product[] | Stock[] | any) => {
+    const normalizeList = (slice: Product[] | Stock[] | Product | Stock) => {
         if (Array.isArray(slice)) return slice;
-        if (slice && Array.isArray(slice.data)) return slice.data;
-        if (slice && Array.isArray(slice.results)) return slice.results;
-        if (slice && Array.isArray(slice['hydra:member'])) return slice['hydra:member'];
+        if (slice && 'data' in slice && Array.isArray(slice.data)) return slice.data;
+        if (slice && 'results' in slice && Array.isArray(slice.results)) return slice.results;
+        if (slice && 'hydra:member' in slice && Array.isArray(slice['hydra:member'])) return slice['hydra:member'];
         return EMPTY_ARRAY;
     };
 
-    const allProducts: Product[] = useMemo(() => normalizeList(productsSlice), [productsSlice]);
-    const allStocks: Stock[] = useMemo(() => normalizeList(stocksSlice), [stocksSlice]);
+    const allProducts: Product[] = useMemo(() => normalizeList(productsSlice) as Product[], [productsSlice]);
+    const allStocks: Stock[] = useMemo(() => normalizeList(stocksSlice) as Stock[], [stocksSlice]);
     // Keep product list usable even if stocks request is delayed/failed.
     const isLoading = productsLoading;
 
@@ -45,14 +45,14 @@ const ProductScreen = () => {
             const stockType = stock?.stockType;
             if (!stockType || !Array.isArray(stock?.products)) return;
 
-            stock.products.forEach((productRef: Product | number | any) => {
+            stock.products.forEach((productRef: Product | number | string) => {
                 // API returns product IRIs like "/api/products/12"
                 if (typeof productRef === 'string') {
                     const productId = productRef.split('/').pop();
                     if (productId) {
                         map[String(productId)] = stockType;
                     }
-                } else if (productRef && productRef.id != null) {
+                } else if (productRef && typeof productRef === 'object' && 'id' in productRef && productRef.id != null) {
                     map[String(productRef.id)] = stockType;
                 }
             });

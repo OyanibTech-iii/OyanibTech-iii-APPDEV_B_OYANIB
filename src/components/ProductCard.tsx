@@ -6,7 +6,7 @@ import { Product } from '../utils/types';
 const { width } = Dimensions.get('window');
 
 interface ProductCardProps {
-    item: Product | any;
+    item: Product;
 }
 
 const ProductCard: React.FC<ProductCardProps> = ({ item }) => {

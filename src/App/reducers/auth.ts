@@ -1,4 +1,4 @@
-import { AuthState } from '../../utils/types';
+import { AuthState, Product, Stock, User, AuthResponse, RegisterResponse } from '../../utils/types';
 import {
   USER_LOGIN,
   USER_GOOGLE_LOGIN,
@@ -48,7 +48,7 @@ const INITIAL_STATE: AuthState = {
 
 interface AuthAction {
   type: string;
-  payload?: any;
+  payload?: AuthResponse | RegisterResponse | Product[] | Stock[] | User[] | string | null;
 }
 
 export default function reducer(state = INITIAL_STATE, action: AuthAction): AuthState {
@@ -59,26 +59,26 @@ export default function reducer(state = INITIAL_STATE, action: AuthAction): Auth
       return { ...state, productsLoading: true, productsError: null };
 
     case GET_PRODUCTS_SUCCESS:
-      return { ...state, products: action.payload, productsLoading: false, productsError: null };
+      return { ...state, products: action.payload as Product[], productsLoading: false, productsError: null };
 
     case GET_PRODUCTS_FAILURE:
-      return { ...state, productsLoading: false, productsError: action.payload };
+      return { ...state, productsLoading: false, productsError: action.payload as string };
     case GET_STOCKS_REQUEST:
       return { ...state, stocksLoading: true, stocksError: null };
 
     case GET_STOCKS_SUCCESS:
-      return { ...state, stocks: action.payload, stocksLoading: false, stocksError: null };
+      return { ...state, stocks: action.payload as Stock[], stocksLoading: false, stocksError: null };
 
     case GET_STOCKS_FAILURE:
-      return { ...state, stocksLoading: false, stocksError: action.payload };
+      return { ...state, stocksLoading: false, stocksError: action.payload as string };
     case GET_USERS_REQUEST:
       return { ...state, usersLoading: true, usersError: null };
 
     case GET_USERS_SUCCESS:
-      return { ...state, users: action.payload, usersLoading: false, usersError: null };
+      return { ...state, users: action.payload as User[], usersLoading: false, usersError: null };
 
     case GET_USERS_FAILURE:
-      return { ...state, usersLoading: false, usersError: action.payload };
+      return { ...state, usersLoading: false, usersError: action.payload as string };
 
     case USER_LOGIN_REQUEST:
     case USER_GOOGLE_LOGIN_REQUEST:
@@ -91,17 +91,19 @@ export default function reducer(state = INITIAL_STATE, action: AuthAction): Auth
         errorMessage: '',
       };
 
-    case USER_LOGIN_COMPLETED:
+    case USER_LOGIN_COMPLETED: {
+      const payload = action.payload as AuthResponse;
       return {
         ...state,
-        data: action.payload,
+        data: payload,
         token:
-          action?.payload?.token ??
-          action?.payload?.data?.token ??
+          payload?.token ??
+          payload?.data?.token ??
           null,
         isLoading: false,
         isError: false,
       };
+    }
 
     case USER_LOGIN_ERROR:
       return {
@@ -109,7 +111,7 @@ export default function reducer(state = INITIAL_STATE, action: AuthAction): Auth
         data: null,
         isLoading: false,
         isError: true,
-        errorMessage: action.payload,
+        errorMessage: action.payload as string,
       };
     case USER_REGISTER_REQUEST:
       return {
@@ -120,26 +122,9 @@ export default function reducer(state = INITIAL_STATE, action: AuthAction): Auth
     case USER_REGISTER_COMPLETED:
       return {
         ...state,
-        registerData: action.payload,
+        registerData: action.payload as RegisterResponse,
         registerLoading: false,
         registerError: false,
-      };
-
-    case USER_REGISTER_ERROR:
-      return {
-        ...state,
-        registerLoading: false,
-        registerError: true,
-        registerErrorMessage: action.payload,
-      };
-
-    case USER_REGISTER_RESET:
-      return {
-        ...state,
-        registerData: null,
-        registerLoading: false,
-        registerError: false,
-        registerErrorMessage: '',
       };
 
     case USER_LOGIN_RESET:
@@ -152,7 +137,7 @@ export default function reducer(state = INITIAL_STATE, action: AuthAction): Auth
   }
 }
 
-export const userLogin = (payload: any) => ({
+export const userLogin = (payload: { email: string; password: string }) => ({
   type: USER_LOGIN,
   payload,
 });
@@ -166,7 +151,7 @@ export const resetLogin = () => ({
   type: USER_LOGIN_RESET
 });
 
-export const userRegister = (payload: any) => ({
+export const userRegister = (payload: { email: string; password: string; firstName: string; lastName: string }) => ({
   type: USER_REGISTER,
   payload,
 });
@@ -175,17 +160,17 @@ export const resetRegister = () => ({
   type: USER_REGISTER_RESET,
 });
 
-export const getProducts = (payload: any) => ({
+export const getProducts = (payload: string) => ({
   type: GET_PRODUCTS_REQUEST,
   payload,
 });
 
-export const getStocks = (payload: any) => ({
+export const getStocks = (payload: string) => ({
   type: GET_STOCKS_REQUEST,
   payload,
 });
 
-export const getUsers = (payload: any) => ({
+export const getUsers = (payload: string) => ({
   type: GET_USERS_REQUEST,
   payload,
 });

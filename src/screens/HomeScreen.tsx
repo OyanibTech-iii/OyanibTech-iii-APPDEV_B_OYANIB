@@ -33,7 +33,7 @@ const HomeScreen = () => {
   }, [dispatch, token]);
 
   const welcomeMessage = useMemo(() => {
-    const normalizeList = (slice: User[] | any) => {
+    const normalizeList = (slice: User[] | User) => {
       if (Array.isArray(slice)) return slice;
       if (slice && Array.isArray(slice.data)) return slice.data;
       if (slice && Array.isArray(slice.results)) return slice.results;
@@ -42,7 +42,7 @@ const HomeScreen = () => {
     };
 
     const users = normalizeList(usersSlice);
-    const loginUser: any = user || {};
+    const loginUser: User = user || ({ email: '' } as User);
     const loginEmail = loginUser.email || loginUser.username || '';
     const matchedUser = users.find((u: User) => {
       const userEmail = u?.email || u?.username || '';

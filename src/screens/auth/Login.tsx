@@ -10,11 +10,12 @@ import CustomModal from '../../components/CustomModal';
 
 import { IMG, ROUTES } from '../../utils';
 import { AuthContext } from '../../utils/AuthContext';
-import { RootState, User } from '../../utils/types';
+import { RootState, User, NavigationProp, RootStackParamList } from '../../utils/types';
 import { useDispatch, useSelector } from 'react-redux';
 import { userLogin, userGoogleLogin, resetLogin } from '../../App/reducers/auth';
 
 const Login = () => {
+  const navigation = useNavigation<NavigationProp>();
   // --- STATE ---
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -30,7 +31,6 @@ const Login = () => {
   const login = authContext?.login;
   const setIsProcessing = authContext?.setIsProcessing;
 
-  const navigation = useNavigation<any>();
   const dispatch = useDispatch();
 
   // Select login state from Redux
@@ -222,8 +222,7 @@ const Login = () => {
         </Text>
         <TouchableOpacity
           style={{ marginLeft: 5 }}
-          onPress={() => (navigation as any).navigate(ROUTES.REGISTER)}
-        >
+          onPress={() => navigation.navigate(ROUTES.REGISTER as keyof RootStackParamList)}        >
           <Text style={{ color: '#1f6908', fontFamily: 'Poppins-Bold', letterSpacing: 0.5, fontSize: 12 }}>
             Register
           </Text>

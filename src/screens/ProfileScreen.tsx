@@ -23,8 +23,8 @@ const ProfileScreen = () => {
     }
   }, [dispatch, token]);
 
-  const currentUser: User | any = useMemo(() => {
-    const normalizeList = (slice: User[] | any) => {
+  const currentUser: User = useMemo(() => {
+    const normalizeList = (slice: User[] | User) => {
       if (Array.isArray(slice)) return slice;
       if (slice && Array.isArray(slice.data)) return slice.data;
       if (slice && Array.isArray(slice.results)) return slice.results;
@@ -33,7 +33,7 @@ const ProfileScreen = () => {
     };
 
     const users = normalizeList(usersSlice);
-    const loginUser: any = user || {};
+    const loginUser: User = user || ({ email: '' } as User);
     const loginEmail = loginUser.email || loginUser.username || '';
 
     const matched =
@@ -42,7 +42,7 @@ const ProfileScreen = () => {
         return apiEmail && loginEmail && apiEmail === loginEmail;
       }) || loginUser;
 
-    return matched || {};
+    return matched || ({ email: '' } as User);
   }, [user, usersSlice]);
 
   const fullName = useMemo(() => {
