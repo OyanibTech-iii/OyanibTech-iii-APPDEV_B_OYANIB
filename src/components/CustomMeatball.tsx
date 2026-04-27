@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { View, Text, TouchableOpacity, Modal, Pressable } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { useAuth } from '../utils/AuthContext';
+import { AuthContext } from '../utils/AuthContext';
 
 const CustomMeatball = () => {
-    const { logout } = useAuth();
+    const { logout} = useContext(AuthContext);
     const [menuVisible, setMenuVisible] = useState(false);
     const [modalVisible, setModalVisible] = useState(false);
 

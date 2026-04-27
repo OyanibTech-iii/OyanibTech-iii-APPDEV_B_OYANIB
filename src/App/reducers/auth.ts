@@ -1,9 +1,11 @@
 import { AuthState } from '../../utils/types';
 import {
   USER_LOGIN,
+  USER_GOOGLE_LOGIN,
   USER_LOGIN_COMPLETED,
   USER_LOGIN_ERROR,
   USER_LOGIN_REQUEST,
+  USER_GOOGLE_LOGIN_REQUEST,
   USER_LOGOUT,
   LOGIN_RESET,
   USER_LOGIN_RESET,
@@ -46,7 +48,7 @@ const INITIAL_STATE: AuthState = {
 
 interface AuthAction {
   type: string;
-  payload?: any; 
+  payload?: any;
 }
 
 export default function reducer(state = INITIAL_STATE, action: AuthAction): AuthState {
@@ -79,6 +81,7 @@ export default function reducer(state = INITIAL_STATE, action: AuthAction): Auth
       return { ...state, usersLoading: false, usersError: action.payload };
 
     case USER_LOGIN_REQUEST:
+    case USER_GOOGLE_LOGIN_REQUEST:
       return {
         ...state,
         data: null,
@@ -149,9 +152,13 @@ export default function reducer(state = INITIAL_STATE, action: AuthAction): Auth
   }
 }
 
-export const userLogin = (payload: unknown) => ({
+export const userLogin = (payload: any) => ({
   type: USER_LOGIN,
   payload,
+});
+
+export const userGoogleLogin = () => ({
+  type: USER_GOOGLE_LOGIN,
 });
 
 
@@ -159,7 +166,7 @@ export const resetLogin = () => ({
   type: USER_LOGIN_RESET
 });
 
-export const userRegister = (payload: unknown) => ({
+export const userRegister = (payload: any) => ({
   type: USER_REGISTER,
   payload,
 });
@@ -168,17 +175,17 @@ export const resetRegister = () => ({
   type: USER_REGISTER_RESET,
 });
 
-export const getProducts = (payload: unknown) => ({
+export const getProducts = (payload: any) => ({
   type: GET_PRODUCTS_REQUEST,
   payload,
 });
 
-export const getStocks = (payload: unknown) => ({
+export const getStocks = (payload: any) => ({
   type: GET_STOCKS_REQUEST,
   payload,
 });
 
-export const getUsers = (payload: unknown) => ({
+export const getUsers = (payload: any) => ({
   type: GET_USERS_REQUEST,
   payload,
 });

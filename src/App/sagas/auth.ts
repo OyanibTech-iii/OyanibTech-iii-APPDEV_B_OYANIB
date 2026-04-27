@@ -25,7 +25,7 @@ import {
   GET_USERS_FAILURE,
 } from '../actions';
 
-export function* userLoginAsync(action: any): SagaIterator {
+export function* userLoginAsync(action: { payload: { email: string; password: string; }; }):SagaIterator {
   yield put({ type: USER_LOGIN_REQUEST });
   try {
     const data = yield call(authLogin, action.payload);
@@ -53,19 +53,13 @@ export function* userGoogleLoginAsync(): SagaIterator {
     
     // For now, let's treat the google user as the logged in user
     yield put({ type: USER_LOGIN_COMPLETED, payload: { user: userInfo.user, token: userInfo.idToken } });
-  } catch (error: unknown) {
-    if (typeof error === 'object' && error !== null && 'code' in error) {
-      const e = error as { code: string; message?: string };
-      if (e.code === statusCodes.SIGN_IN_CANCELLED) {
-        yield put({ type: USER_LOGIN_ERROR, payload: 'Google sign-in cancelled' });
-      } else if (e.code === statusCodes.IN_PROGRESS) {
-        yield put({ type: USER_LOGIN_ERROR, payload: 'Google sign-in already in progress' });
-      } else if (e.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
-        yield put({ type: USER_LOGIN_ERROR, payload: 'Play services not available' });
-      } else {
-        const errorMessage = e.message || 'Google login failed';
-        yield put({ type: USER_LOGIN_ERROR, payload: errorMessage });
-      }
+  } catch (error: any) {
+    if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+      yield put({ type: USER_LOGIN_ERROR, payload: 'Google sign-in cancelled' });
+    } else if (error.code === statusCodes.IN_PROGRESS) {
+      yield put({ type: USER_LOGIN_ERROR, payload: 'Google sign-in already in progress' });
+    } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+      yield put({ type: USER_LOGIN_ERROR, payload: 'Play services not available' });
     } else {
       const errorMessage = error instanceof Error ? error.message : 'Google login failed';
       yield put({ type: USER_LOGIN_ERROR, payload: errorMessage });
@@ -73,7 +67,7 @@ export function* userGoogleLoginAsync(): SagaIterator {
     console.error("Saga Google Login Error:", error);
   }
 }
-export function* userRegisterAsync(action: any): SagaIterator {
+export function* userRegisterAsync(action: { payload: { email: string; password: string; firstName: string; lastName: string; }; }): SagaIterator {
   yield put({ type: USER_REGISTER_REQUEST });
   try {
     const response = yield call(userRegister, action.payload);
@@ -85,7 +79,7 @@ export function* userRegisterAsync(action: any): SagaIterator {
   }
 }
 
-export function* getProductsAsync(action: any): SagaIterator {
+export function* getProductsAsync(action: { payload: string; }): SagaIterator {
   try {
     const data = yield call(getProducts, action.payload);
     yield put({ type: GET_PRODUCTS_SUCCESS, payload: data });
@@ -95,7 +89,7 @@ export function* getProductsAsync(action: any): SagaIterator {
   }
 }
 
-export function* getStocksAsync(action: any): SagaIterator {
+export function* getStocksAsync(action: { payload: string; }): SagaIterator {
   try {
     const data = yield call(getStocks, action.payload);
     yield put({ type: GET_STOCKS_SUCCESS, payload: data });
@@ -105,7 +99,7 @@ export function* getStocksAsync(action: any): SagaIterator {
   }
 }
 
-export function* getUsersAsync(action: any): SagaIterator {
+export function* getUsersAsync(action: { payload: string; }): SagaIterator {
   try {
     const data = yield call(getUsers, action.payload);
     yield put({ type: GET_USERS_SUCCESS, payload: data });
@@ -116,22 +110,22 @@ export function* getUsersAsync(action: any): SagaIterator {
 }
 
 export function* watchGetProducts() {
-  yield takeEvery(GET_PRODUCTS_REQUEST as any, getProductsAsync);
+  yield takeEvery(GET_PRODUCTS_REQUEST, getProductsAsync);
 }
 
 export function* userLogin() {
-  yield takeEvery(USER_LOGIN as any, userLoginAsync);
-  yield takeEvery(USER_GOOGLE_LOGIN as any, userGoogleLoginAsync);
+  yield takeEvery(USER_LOGIN, userLoginAsync);
+  yield takeEvery(USER_GOOGLE_LOGIN, userGoogleLoginAsync);
 }
 
 export function* watchUserRegister() {
-  yield takeEvery(USER_REGISTER as any, userRegisterAsync);
+  yield takeEvery(USER_REGISTER, userRegisterAsync);
 }
 
 export function* watchGetStocks() {
-  yield takeEvery(GET_STOCKS_REQUEST as any, getStocksAsync);
+  yield takeEvery(GET_STOCKS_REQUEST, getStocksAsync);
 }
 
 export function* watchGetUsers() {
-  yield takeEvery(GET_USERS_REQUEST as any, getUsersAsync);
+  yield takeEvery(GET_USERS_REQUEST, getUsersAsync);
 }

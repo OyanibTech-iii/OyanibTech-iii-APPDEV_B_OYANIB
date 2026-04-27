@@ -12,6 +12,7 @@ import { IMG, ROUTES } from '../../utils';
 import { AuthContext } from '../../utils/AuthContext';
 import { RootState, User } from '../../utils/types';
 import { useDispatch, useSelector } from 'react-redux';
+import { userLogin, userGoogleLogin, resetLogin } from '../../App/reducers/auth';
 
 const Login = () => {
   // --- STATE ---
@@ -187,6 +188,31 @@ const Login = () => {
               password,
             }),
           );
+        }}
+      />
+
+      <CustomButton
+        label={'Sign in with Google'}
+        containerStyle={{
+          justifyContent: 'center',
+          marginVertical: 5,
+          width: '80%',
+          backgroundColor: '#ffffff',
+          borderRadius: 10,
+          borderWidth: 1,
+          borderColor: '#ddd',
+        }}
+        textStyle={{
+          color: '#000000',
+          textAlign: 'center',
+          fontSize: 16,
+          fontFamily: 'Poppins-Medium',
+        }}
+        loading={isLoading}
+        onPress={() => {
+          console.log("Attempting Google login");
+          didSubmitRef.current = true;
+          dispatch(userGoogleLogin());
         }}
       />
 

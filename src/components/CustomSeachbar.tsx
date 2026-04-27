@@ -13,16 +13,9 @@ const CustomSeachbar: React.FC<CustomSearchbarProps> = ({ search, updateSearch, 
     <View style={[{ paddingTop: 20 }, containerStyle]}>
       <SearchBar
         placeholder="Search for products or courses..."
-        onChangeText={(text: string) => updateSearch(text)}
+        onChangeText={updateSearch}
         value={search}
         platform="default"
-        loadingProps={{}}
-        showLoading={false}
-        lightTheme={false}
-        round={false}
-        onClear={() => {}}
-        onFocus={() => {}}
-        onBlur={() => {}}
         containerStyle={{
           backgroundColor: 'transparent',
           borderBottomColor: 'transparent',
