@@ -8,6 +8,8 @@ export interface User {
   last_name?: string;
   firstName?: string;
   lastName?: string;
+  firstname?: string;
+  lastname?: string;
   roles?: string[];
   avatar?: string;
   avatarUrl?: string;
@@ -45,8 +47,23 @@ export interface Stock {
   'hydra:member'?: Stock[];
 }
 
+export interface Course {
+  id: number;
+  title?: string;
+  courseName?: string;
+  description: string;
+  duration_left: string;
+  progress: number;
+  tier?: string;
+  price?: string | number;
+  thumbnail?: string;
+  data?: Course[];
+  results?: Course[];
+  'hydra:member'?: Course[];
+}
+
 export interface AuthState {
-  data: AuthResponse | null; // Detailed user/auth data from login
+  data: AuthResponse | null; 
   token: string | null;
   isLoading: boolean;
   isError: boolean;
@@ -64,6 +81,9 @@ export interface AuthState {
   users: User[];
   usersLoading: boolean;
   usersError: string | null;
+  courses: Course[];
+  coursesLoading: boolean;
+  coursesError: string | null;
 }
 
 export interface RootState {

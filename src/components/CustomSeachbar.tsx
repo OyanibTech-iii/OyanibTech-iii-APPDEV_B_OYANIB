@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, StyleProp, ViewStyle } from 'react-native';
-import { SearchBar } from 'react-native-elements';
+import { SearchBar, Icon } from 'react-native-elements';
 
 interface CustomSearchbarProps {
   search: string;
@@ -13,7 +13,8 @@ const CustomSeachbar: React.FC<CustomSearchbarProps> = ({ search, updateSearch, 
     <View style={[{ paddingTop: 20 }, containerStyle]}>
       <SearchBar
         placeholder="Search for products or courses..."
-        onChangeText={updateSearch}
+        onChangeText={(text) => updateSearch(text)}
+        onClear={() => updateSearch('')}
         value={search}
         platform="default"
         containerStyle={{
@@ -40,7 +41,8 @@ const CustomSeachbar: React.FC<CustomSearchbarProps> = ({ search, updateSearch, 
           color: '#0f3a03',
         }}
         leftIconContainerStyle={{ marginLeft: 10 }}
-        searchIcon={{ name: 'search', color: '#47bf24' }}
+        searchIcon={<Icon name="search" color="#47bf24" />}
+        clearIcon={<Icon name="close" color="#47bf24" onPress={() => updateSearch('')} />}
       />
     </View>
   );

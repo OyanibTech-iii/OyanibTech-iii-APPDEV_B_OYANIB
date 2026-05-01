@@ -1,6 +1,6 @@
-import React, { useContext, useMemo, useState, useEffect } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import { Text, View, ScrollView, Linking, TextStyle } from 'react-native';
-import { AuthContext } from '../utils/AuthContext';
+import { useAuth } from '../utils/AuthContext';
 import { RootState, User } from '../utils/types';
 import { IMG } from '../utils';
 import { useDispatch, useSelector } from 'react-redux';
@@ -15,8 +15,7 @@ import CustomScrollContent from '../components/CustomScrollContent';
 
 const HomeScreen = () => {
   const dispatch = useDispatch();
-  const authContext = useContext(AuthContext);
-  const user = authContext?.user;
+  const { user } = useAuth();
   const token = useSelector((state: RootState) => state.auth.token);
   const usersSlice = useSelector((state: RootState) => state.auth.users);
 
@@ -81,7 +80,7 @@ const HomeScreen = () => {
 
         <Text style={{ marginTop: 30, fontSize: 16, fontFamily: 'Poppins-Medium', color: '#072d14', marginLeft: 30, textAlign: 'left' as TextStyle['textAlign'] }}>Garden Transformed </Text>
         <CustomCarousel />
-        <CustomScrollContent />
+        {/* <CustomScrollContent /> */}
         <SocialMedia />
         <CustomFooter />
       </ScrollView>

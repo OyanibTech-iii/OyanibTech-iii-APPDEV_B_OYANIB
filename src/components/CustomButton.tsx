@@ -7,6 +7,8 @@ interface CustomButtonProps {
   textStyle?: StyleProp<TextStyle>;
   onPress?: () => void;
   loading?: boolean;
+  icon?: React.ReactNode;
+
 }
 
 const CustomButton: React.FC<CustomButtonProps> = ({ 
@@ -14,38 +16,33 @@ const CustomButton: React.FC<CustomButtonProps> = ({
   label, 
   textStyle, 
   onPress, 
-  loading = false 
+  loading = false ,
+  icon
+
 }) => {
   const { width } = Dimensions.get('window');
 
   return (
-    <TouchableOpacity 
-      onPress={loading ? undefined : onPress} 
-      disabled={loading}
-      style={[
-        { 
-          paddingVertical: width * 0.02, 
+   <View style={containerStyle}>
+      <TouchableOpacity onPress={loading ? undefined : onPress} disabled={loading}>
+        <View style={{ 
+          padding: width * 0.014, 
           borderRadius: 10, 
-          justifyContent: 'center', 
-          alignItems: 'center',
-          backgroundColor: '#16a34a' 
-        }, 
-        containerStyle as ViewStyle
-      ]}
-    >
-      {loading ? (
-        <ActivityIndicator 
-          color={
-            textStyle && typeof textStyle === 'object' && 'color' in textStyle 
-              ? (textStyle as TextStyle).color 
-              : "#ffffff"
-          } 
-          size="small" 
-        />
-      ) : (
-        <Text style={textStyle}>{label}</Text>
-      )}
-    </TouchableOpacity>
+          flexDirection: 'row', 
+          alignItems: 'center', 
+          justifyContent: 'center' 
+        }}>
+          {loading ? (
+            <ActivityIndicator color="#ffffff" size="small" />
+          ) : (
+            <>
+              {icon && <View style={{ marginRight: 10 }}>{icon}</View>}
+              <Text style={textStyle}>{label}</Text>
+            </>
+          )}
+        </View>
+      </TouchableOpacity>
+    </View>
   );
 };
 

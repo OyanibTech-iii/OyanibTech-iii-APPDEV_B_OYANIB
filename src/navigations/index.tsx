@@ -1,5 +1,5 @@
 import { NavigationContainer } from '@react-navigation/native';
-import { useContext, useEffect } from 'react';
+import { useEffect } from 'react';
 import { Platform, StatusBar, useColorScheme } from 'react-native';
 import { useDispatch} from 'react-redux';
 import AuthNav from './AuthNav';
@@ -7,7 +7,7 @@ import MainNav from './MainNav';
 import ProcessNav from './ProcessNav';
 import ReleaseNav from './ReleaseNav';
 import ErrorNav from './ErrorNav';
-import { AuthContext } from '../utils/AuthContext';
+import { useAuth } from '../utils/AuthContext';
 import { useSelector } from 'react-redux';
 import { RootState } from '../utils/types';
 import { resetLogin } from '../App/reducers/auth';
@@ -18,10 +18,7 @@ export default () => {
   const isDarkMode = useColorScheme() === 'dark';
 
   const { isError, errorMessage } = useSelector((state: RootState) => state.auth);
-  const authContext = useContext(AuthContext);
-  const isLoggedIn = authContext?.isLoggedIn;
-  const isProcessing = authContext?.isProcessing;
-  const isReleasing = authContext?.isReleasing;
+  const { isLoggedIn, isProcessing, isReleasing } = useAuth();
   
   const handleRetry = () => {
     dispatch(resetLogin()); 

@@ -95,3 +95,20 @@ export const getUsers = async (token: string) => {
   }
   return await response.json();
 };
+
+export const getCourses = async (token: string) => {
+  const response = await fetch(`${BASE_URL}/courses`, {
+    method: 'GET',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.message || 'Failed to fetch courses');
+  }
+  return await response.json();
+};

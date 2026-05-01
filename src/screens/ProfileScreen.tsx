@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { Image, Text, View, TouchableOpacity, ScrollView } from 'react-native';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { useDispatch, useSelector } from 'react-redux';
@@ -6,13 +6,12 @@ import { GET_USERS_REQUEST } from '../App/actions';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import CustomFooter from '../components/CustomFooter';
 import CustomMeatball from '../components/CustomMeatball';
-import { AuthContext } from '../utils/AuthContext';
+import { useAuth } from '../utils/AuthContext';
 import { RootState, User } from '../utils/types';
 
 const ProfileScreen = () => {
   const dispatch = useDispatch();
-  const authContext = useContext(AuthContext);
-  const user = authContext?.user;
+  const { user } = useAuth();
   const token = useSelector((state: RootState) => state.auth.token);
   const usersSlice = useSelector((state: RootState) => state.auth.users);
   const tabBarHeight = useBottomTabBarHeight();

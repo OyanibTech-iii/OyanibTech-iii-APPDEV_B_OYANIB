@@ -1,4 +1,4 @@
-import { AuthState, Product, Stock, User, AuthResponse, RegisterResponse } from '../../utils/types';
+import { AuthState, Product, Stock, User, Course, AuthResponse, RegisterResponse } from '../../utils/types';
 import {
   USER_LOGIN,
   USER_GOOGLE_LOGIN,
@@ -12,7 +12,6 @@ import {
   USER_REGISTER,
   USER_REGISTER_REQUEST,
   USER_REGISTER_COMPLETED,
-  USER_REGISTER_ERROR,
   USER_REGISTER_RESET,
   GET_PRODUCTS_REQUEST,
   GET_PRODUCTS_SUCCESS,
@@ -22,7 +21,10 @@ import {
   GET_STOCKS_FAILURE,
   GET_USERS_REQUEST,
   GET_USERS_SUCCESS,
-  GET_USERS_FAILURE
+  GET_USERS_FAILURE,
+  GET_COURSES_REQUEST,
+  GET_COURSES_SUCCESS,
+  GET_COURSES_FAILURE
 } from '../actions';
 
 const INITIAL_STATE: AuthState = {
@@ -44,11 +46,14 @@ const INITIAL_STATE: AuthState = {
   users: [],
   usersLoading: false,
   usersError: null,
+  courses: [],
+  coursesLoading: false,
+  coursesError: null,
 };
 
 interface AuthAction {
   type: string;
-  payload?: AuthResponse | RegisterResponse | Product[] | Stock[] | User[] | string | null;
+  payload?: AuthResponse | RegisterResponse | Product[] | Stock[] | User[] | Course[] | string | null;
 }
 
 export default function reducer(state = INITIAL_STATE, action: AuthAction): AuthState {
@@ -79,6 +84,15 @@ export default function reducer(state = INITIAL_STATE, action: AuthAction): Auth
 
     case GET_USERS_FAILURE:
       return { ...state, usersLoading: false, usersError: action.payload as string };
+
+    case GET_COURSES_REQUEST:
+      return { ...state, coursesLoading: true, coursesError: null };
+
+    case GET_COURSES_SUCCESS:
+      return { ...state, courses: action.payload as Course[], coursesLoading: false, coursesError: null };
+
+    case GET_COURSES_FAILURE:
+      return { ...state, coursesLoading: false, coursesError: action.payload as string };
 
     case USER_LOGIN_REQUEST:
     case USER_GOOGLE_LOGIN_REQUEST:
@@ -172,5 +186,10 @@ export const getStocks = (payload: string) => ({
 
 export const getUsers = (payload: string) => ({
   type: GET_USERS_REQUEST,
+  payload,
+});
+
+export const getCourses = (payload: string) => ({
+  type: GET_COURSES_REQUEST,
   payload,
 });

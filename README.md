@@ -117,7 +117,7 @@ src/
 - **Run on Android:**
   ```bash
   npm run android
-  ```
+  ```p
 
 - **Run on iOS:**
   ```bash

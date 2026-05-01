@@ -1,5 +1,5 @@
 import React from 'react';
-import { useContext, useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Text, TouchableOpacity, View, Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
@@ -7,9 +7,11 @@ import CustomButton from '../../components/CustomButton';
 import CustomFooter from '../../components/CustomFooter';
 import CustomTextInput from '../../components/CustomTextInput';
 import CustomModal from '../../components/CustomModal';
+import Icon from 'react-native-vector-icons/AntDesign';
+
 
 import { IMG, ROUTES } from '../../utils';
-import { AuthContext } from '../../utils/AuthContext';
+import { useAuth } from '../../utils/AuthContext';
 import { RootState, User, NavigationProp, RootStackParamList } from '../../utils/types';
 import { useDispatch, useSelector } from 'react-redux';
 import { userLogin, userGoogleLogin, resetLogin } from '../../App/reducers/auth';
@@ -27,9 +29,7 @@ const Login = () => {
   }>({ title: '', message: '', type: 'error' });
 
   // --- CONTEXT & REDUX ---
-  const authContext = useContext(AuthContext);
-  const login = authContext?.login;
-  const setIsProcessing = authContext?.setIsProcessing;
+  const { login, setIsProcessing } = useAuth();
 
   const dispatch = useDispatch();
 
@@ -94,7 +94,10 @@ const Login = () => {
           if (modalContent.type === 'success' && data) {
             setIsProcessing?.(true); 
             setTimeout(() => {
-              login?.(data);        
+              const userToLogin = data.user || data.data?.user;
+              if (userToLogin) {
+                login?.(userToLogin);
+              }
               setIsProcessing?.(false);
             }, 2500);
           }
@@ -169,7 +172,7 @@ const Login = () => {
           justifyContent: 'center',
           marginVertical: 10,
           width: '80%',
-          backgroundColor: '#47bf24',
+          backgroundColor: '#04691f',
           borderRadius: 10,
         }}
         textStyle={{
@@ -192,7 +195,8 @@ const Login = () => {
       />
 
       <CustomButton
-        label={'Sign in with Google'}
+        label={'Continue with Google'}
+        icon={<Icon name="google" size={20} color="#1f6908" />}
         containerStyle={{
           justifyContent: 'center',
           marginVertical: 5,
