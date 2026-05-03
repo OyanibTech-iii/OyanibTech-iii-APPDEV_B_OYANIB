@@ -12,7 +12,7 @@ import Icon from 'react-native-vector-icons/AntDesign';
 
 import { IMG, ROUTES } from '../../utils';
 import { useAuth } from '../../utils/AuthContext';
-import { RootState, User, NavigationProp, RootStackParamList } from '../../utils/types';
+import { RootState, NavigationProp, RootStackParamList } from '../../utils/types';
 import { useDispatch, useSelector } from 'react-redux';
 import { userLogin, userGoogleLogin, resetLogin } from '../../App/reducers/auth';
 

@@ -7,6 +7,7 @@ import {
   getStocks,
   getUsers,
   getCourses,
+  getUserQrCodes,
 } from '../api/auth';
 import {
   GoogleSignin,
@@ -20,6 +21,7 @@ import {
   Stock,
   User,
   Course,
+  QrCode,
 } from '../../utils/types';
 
 import {
@@ -45,6 +47,9 @@ import {
   GET_COURSES_SUCCESS,
   GET_COURSES_REQUEST,
   GET_COURSES_FAILURE,
+  GET_QR_CODES_SUCCESS,
+  GET_QR_CODES_REQUEST,
+  GET_QR_CODES_FAILURE,
 } from '../actions';
 
 export function* userLoginAsync(action: {
@@ -179,6 +184,20 @@ export function* getCoursesAsync(action: {
   }
 }
 
+export function* getQrCodesAsync(action: {
+  type: string;
+  payload: string;
+}): SagaIterator {
+  try {
+    const data = (yield call(getUserQrCodes, action.payload)) as QrCode[];
+    yield put({ type: GET_QR_CODES_SUCCESS, payload: data });
+  } catch (error: unknown) {
+    const errorMessage =
+      error instanceof Error ? error.message : 'Failed to fetch QR codes';
+    yield put({ type: GET_QR_CODES_FAILURE, payload: errorMessage });
+  }
+}
+
 export function* watchGetProducts(): SagaIterator {
   yield takeEvery(GET_PRODUCTS_REQUEST, getProductsAsync);
 }
@@ -202,4 +221,8 @@ export function* watchGetUsers(): SagaIterator {
 
 export function* watchGetCourses(): SagaIterator {
   yield takeEvery(GET_COURSES_REQUEST, getCoursesAsync);
+}
+
+export function* watchGetQrCodes(): SagaIterator {
+  yield takeEvery(GET_QR_CODES_REQUEST, getQrCodesAsync);
 }

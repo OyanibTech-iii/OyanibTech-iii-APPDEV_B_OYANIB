@@ -37,7 +37,6 @@ const CoursesScreen = () => {
           <View style={{ flex: 1 }}>
             {course.thumbnail && (
               <Image 
-                source={{ uri: course.thumbnail }} 
                 style={{ width: '100%', height: 100, borderRadius: 10, marginBottom: 10 }} 
                 resizeMode="cover"
               />

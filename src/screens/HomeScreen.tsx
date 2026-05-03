@@ -1,5 +1,5 @@
 import React, { useMemo, useState, useEffect } from 'react';
-import { Text, View, ScrollView, Linking, TextStyle } from 'react-native';
+import { Text, View, ScrollView, TextStyle } from 'react-native';
 import { useAuth } from '../utils/AuthContext';
 import { RootState, User } from '../utils/types';
 import { IMG } from '../utils';
@@ -10,7 +10,6 @@ import SocialMedia from '../components/SocialMedia';
 import CustomSeachbar from '../components/CustomSeachbar';
 import Banner from '../components/Banner';
 import CustomCarousel from '../components/CustomCarousel';
-import CustomScrollContent from '../components/CustomScrollContent';
 
 
 const HomeScreen = () => {

@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { Dimensions, Text, View, TouchableOpacity, Animated, StyleProp, ViewStyle, TextStyle } from 'react-native';
+import { Text, View, TouchableOpacity, Animated, StyleProp, ViewStyle, TextStyle } from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/Ionicons';
 

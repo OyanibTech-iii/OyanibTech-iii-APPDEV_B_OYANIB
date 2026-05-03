@@ -62,6 +62,17 @@ export interface Course {
   'hydra:member'?: Course[];
 }
 
+export interface QrCode {
+  id: number;
+  user: string;
+  identifier: string;
+  qrCodePath?: string;
+  createdAt: string;
+  data?: QrCode[];
+  results?: QrCode[];
+  'hydra:member'?: QrCode[];
+}
+
 export interface AuthState {
   data: AuthResponse | null; 
   token: string | null;
@@ -84,6 +95,9 @@ export interface AuthState {
   courses: Course[];
   coursesLoading: boolean;
   coursesError: string | null;
+  qrCodes: QrCode[];
+  qrCodesLoading: boolean;
+  qrCodesError: string | null;
 }
 
 export interface RootState {

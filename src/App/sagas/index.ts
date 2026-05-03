@@ -6,6 +6,7 @@ import {
   watchGetStocks,
   watchGetUsers,
   watchGetCourses,
+  watchGetQrCodes,
 } from './auth';
 
 export default function* rootSaga() {
@@ -16,5 +17,6 @@ export default function* rootSaga() {
     watchGetStocks(),
     watchGetUsers(),
     watchGetCourses(),
+    watchGetQrCodes(),
   ]);
 }

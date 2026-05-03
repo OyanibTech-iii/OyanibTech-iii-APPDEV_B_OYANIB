@@ -1,4 +1,4 @@
-import { AuthState, Product, Stock, User, Course, AuthResponse, RegisterResponse } from '../../utils/types';
+import { AuthState, Product, Stock, User, Course, QrCode, AuthResponse, RegisterResponse } from '../../utils/types';
 import {
   USER_LOGIN,
   USER_GOOGLE_LOGIN,
@@ -24,7 +24,10 @@ import {
   GET_USERS_FAILURE,
   GET_COURSES_REQUEST,
   GET_COURSES_SUCCESS,
-  GET_COURSES_FAILURE
+  GET_COURSES_FAILURE,
+  GET_QR_CODES_REQUEST,
+  GET_QR_CODES_SUCCESS,
+  GET_QR_CODES_FAILURE
 } from '../actions';
 
 const INITIAL_STATE: AuthState = {
@@ -49,11 +52,14 @@ const INITIAL_STATE: AuthState = {
   courses: [],
   coursesLoading: false,
   coursesError: null,
+  qrCodes: [],
+  qrCodesLoading: false,
+  qrCodesError: null,
 };
 
 interface AuthAction {
   type: string;
-  payload?: AuthResponse | RegisterResponse | Product[] | Stock[] | User[] | Course[] | string | null;
+  payload?: AuthResponse | RegisterResponse | Product[] | Stock[] | User[] | Course[] | QrCode[] | string | null;
 }
 
 export default function reducer(state = INITIAL_STATE, action: AuthAction): AuthState {
@@ -93,6 +99,15 @@ export default function reducer(state = INITIAL_STATE, action: AuthAction): Auth
 
     case GET_COURSES_FAILURE:
       return { ...state, coursesLoading: false, coursesError: action.payload as string };
+
+    case GET_QR_CODES_REQUEST:
+      return { ...state, qrCodesLoading: true, qrCodesError: null };
+
+    case GET_QR_CODES_SUCCESS:
+      return { ...state, qrCodes: action.payload as QrCode[], qrCodesLoading: false, qrCodesError: null };
+
+    case GET_QR_CODES_FAILURE:
+      return { ...state, qrCodesLoading: false, qrCodesError: action.payload as string };
 
     case USER_LOGIN_REQUEST:
     case USER_GOOGLE_LOGIN_REQUEST:
@@ -191,5 +206,10 @@ export const getUsers = (payload: string) => ({
 
 export const getCourses = (payload: string) => ({
   type: GET_COURSES_REQUEST,
+  payload,
+});
+
+export const getQrCodes = (payload: string) => ({
+  type: GET_QR_CODES_REQUEST,
   payload,
 });

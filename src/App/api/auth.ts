@@ -112,3 +112,20 @@ export const getCourses = async (token: string) => {
   }
   return await response.json();
 };
+
+export const getUserQrCodes = async (token: string) => {
+  const response = await fetch(`${BASE_URL}/user_qr_codes`, {
+    method: 'GET',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.message || 'Failed to fetch QR codes');
+  }
+  return await response.json();
+};

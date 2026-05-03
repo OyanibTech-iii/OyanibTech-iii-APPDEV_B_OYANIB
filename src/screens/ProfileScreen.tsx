@@ -1,33 +1,38 @@
-import React, { useEffect, useMemo } from 'react';
-import { Image, Text, View, TouchableOpacity, ScrollView } from 'react-native';
+import React, { useEffect, useMemo, useState } from 'react';
+import { Image, Text, View, TouchableOpacity, ScrollView, Modal, Pressable, ActivityIndicator } from 'react-native';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { useDispatch, useSelector } from 'react-redux';
-import { GET_USERS_REQUEST } from '../App/actions';
+import { GET_USERS_REQUEST, GET_QR_CODES_REQUEST } from '../App/actions';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import CustomFooter from '../components/CustomFooter';
 import CustomMeatball from '../components/CustomMeatball';
 import { useAuth } from '../utils/AuthContext';
-import { RootState, User } from '../utils/types';
+import { RootState, User, QrCode } from '../utils/types';
 
 const ProfileScreen = () => {
   const dispatch = useDispatch();
   const { user } = useAuth();
   const token = useSelector((state: RootState) => state.auth.token);
   const usersSlice = useSelector((state: RootState) => state.auth.users);
+  const qrCodes = useSelector((state: RootState) => state.auth.qrCodes);
+  const qrCodesLoading = useSelector((state: RootState) => state.auth.qrCodesLoading);
   const tabBarHeight = useBottomTabBarHeight();
+
+  const [qrModalVisible, setQrModalVisible] = useState(false);
 
   useEffect(() => {
     if (token) {
       dispatch({ type: GET_USERS_REQUEST, payload: token });
+      dispatch({ type: GET_QR_CODES_REQUEST, payload: token });
     }
   }, [dispatch, token]);
 
   const currentUser: User = useMemo(() => {
     const normalizeList = (slice: User[] | User) => {
       if (Array.isArray(slice)) return slice;
-      if (slice && Array.isArray(slice.data)) return slice.data;
-      if (slice && Array.isArray(slice.results)) return slice.results;
-      if (slice && Array.isArray(slice['hydra:member'])) return slice['hydra:member'];
+      if (slice && (slice as any).data && Array.isArray((slice as any).data)) return (slice as any).data;
+      if (slice && (slice as any).results && Array.isArray((slice as any).results)) return (slice as any).results;
+      if (slice && (slice as any)['hydra:member'] && Array.isArray((slice as any)['hydra:member'])) return (slice as any)['hydra:member'];
       return [];
     };
 
@@ -43,6 +48,30 @@ const ProfileScreen = () => {
 
     return matched || ({ email: '' } as User);
   }, [user, usersSlice]);
+
+  const userQrCode = useMemo(() => {
+    const normalizeList = (slice: QrCode[] | QrCode) => {
+      if (Array.isArray(slice)) return slice;
+      if (slice && (slice as any).data && Array.isArray((slice as any).data)) return (slice as any).data;
+      if (slice && (slice as any)['hydra:member'] && Array.isArray((slice as any)['hydra:member'])) return (slice as any)['hydra:member'];
+      return [];
+    };
+    const codes = normalizeList(qrCodes);
+    
+    // Find QR code matching current user
+    // currentUser.id could be 1, codes[i].user could be "/api/users/1"
+    const matched = codes.find((code: QrCode) => {
+      const userId = currentUser.id;
+      if (!userId) return false;
+      return code.user === `/api/users/${userId}` || code.user === String(userId);
+    });
+
+    let path = matched?.qrCodePath || null;
+    if (path && path.includes('localhost')) {
+      path = path.replace('localhost', '127.0.0.1');
+    }
+    return path;
+  }, [qrCodes, currentUser]);
 
   const fullName = useMemo(() => {
     const firstName = currentUser.firstName || currentUser.first_name || '';
@@ -86,39 +115,57 @@ const ProfileScreen = () => {
       <CustomMeatball />
       <ScrollView contentContainerStyle={{ paddingBottom: tabBarHeight + 20 }}>
         <View style={{ alignItems: 'center', marginTop: 10 }}>
-          <View style={{
-            width: 100,
-            height: 100,
-            borderRadius: 65,
-            backgroundColor: '#f8fafc',
-            padding: 3,
-            justifyContent: 'center',
-            alignItems: 'center',
-            borderWidth: 1,
-            borderColor: '#e2e8f0'
-          }}>
-            {avatarUri ? (
-              <Image
-                source={{ uri: avatarUri }}
-                resizeMode='cover'
-                style={{ width: 100, height: 100, borderRadius: 50 }}
-              />
-            ) : (
-              <View
-                style={{
-                  width: 100,
-                  height: 100,
-                  borderRadius: 50,
-                  backgroundColor: '#1f6908',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}
-              >
-                <Text style={{ color: '#ffffff', fontSize: 34, fontFamily: 'Poppins-Bold' }}>
-                  {initialLetter}
-                </Text>
-              </View>
-            )}
+          <View style={{ position: 'relative' }}>
+            <View style={{
+              width: 100,
+              height: 100,
+              borderRadius: 65,
+              backgroundColor: '#f8fafc',
+              padding: 3,
+              justifyContent: 'center',
+              alignItems: 'center',
+              borderWidth: 1,
+              borderColor: '#e2e8f0'
+            }}>
+              {avatarUri ? (
+                <Image
+                  source={{ uri: avatarUri }}
+                  resizeMode='cover'
+                  style={{ width: 100, height: 100, borderRadius: 50 }}
+                />
+              ) : (
+                <View
+                  style={{
+                    width: 100,
+                    height: 100,
+                    borderRadius: 50,
+                    backgroundColor: '#1f6908',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}
+                >
+                  <Text style={{ color: '#ffffff', fontSize: 34, fontFamily: 'Poppins-Bold' }}>
+                    {initialLetter}
+                  </Text>
+                </View>
+              )}
+            </View>
+            <TouchableOpacity 
+              onPress={() => setQrModalVisible(true)}
+              style={{
+                position: 'absolute',
+                bottom: 0,
+                right: 0,
+                backgroundColor: '#ffffff',
+                padding: 5,
+                borderRadius: 15,
+                borderWidth: 1,
+                borderColor: '#e2e8f0',
+                elevation: 2
+              }}
+            >
+              <Ionicons name="qr-code-outline" size={20} color="#1f6908" />
+            </TouchableOpacity>
           </View>
           <Text style={{ color: '#044b31', fontSize: 20, fontFamily: 'Poppins-Regular', marginTop: 15 }}>{fullName}</Text>
           <Text style={{ color: '#64748b', fontSize: 12, fontFamily: 'Poppins-Regular' }}>{roleLabel}</Text>
@@ -172,6 +219,44 @@ const ProfileScreen = () => {
         </View>
         <CustomFooter />
       </ScrollView>
+
+      <Modal
+        transparent={true}
+        visible={qrModalVisible}
+        animationType="fade"
+        onRequestClose={() => setQrModalVisible(false)}
+      >
+        <Pressable 
+          onPress={() => setQrModalVisible(false)}
+          style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.5)', justifyContent: 'center', alignItems: 'center' }}
+        >
+          <View style={{ width: '80%', backgroundColor: 'white', borderRadius: 12, padding: 20, alignItems: 'center' }}>
+            <Text style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 20, color: '#044b31' }}>Your QR Code</Text>
+            
+            {qrCodesLoading ? (
+              <ActivityIndicator size="large" color="#1f6908" style={{ marginVertical: 30 }} />
+            ) : userQrCode ? (
+              <Image 
+                source={{ uri: userQrCode.startsWith('http') ? userQrCode : `data:image/png;base64,${userQrCode}` }}
+                style={{ width: 200, height: 200, marginBottom: 20 }}
+                resizeMode="contain"
+              />
+            ) : (
+              <View style={{ marginVertical: 30, alignItems: 'center' }}>
+                <Ionicons name="alert-circle-outline" size={50} color="#64748b" />
+                <Text style={{ color: '#64748b', marginTop: 10 }}>No QR code available</Text>
+              </View>
+            )}
+
+            <TouchableOpacity 
+              onPress={() => setQrModalVisible(false)}
+              style={{ width: '100%', padding: 12, backgroundColor: '#1f6908', borderRadius: 8, alignItems: 'center' }}
+            >
+              <Text style={{ fontWeight: '600', color: '#fff' }}>Close</Text>
+            </TouchableOpacity>
+          </View>
+        </Pressable>
+      </Modal>
     </View>
   );
 };
