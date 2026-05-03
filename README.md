@@ -4,19 +4,20 @@
 
 ---
 
-## 🌟 Key Features
+## Key Features
 
 - **Secure & Social Authentication**: Integrated with **Firebase** and **Google Sign-In**, offering both traditional and social login flows with smooth transitions.
 - **Dynamic User Experience**: Personalized home screen with featured banners, intuitive search, and region-specific content.
 - **Interactive Product Ecosystem**: Detailed product showcase featuring interactive carousels, filterable categories (FilterChips), and comprehensive product cards.
 - **Educational Courses**: Curated gardening content and courses to help users develop their green thumb.
-- **Advanced Navigation Flow**: custom-built animated loading screens for login (`ProcessNav`) and logout (`ReleaseNav`) sequences, plus a robust error handling navigation (`ErrorNav`).
-- **Real-Time Data Management**: Powered by **Redux-Saga** for complex asynchronous side effects (API, Auth, Products, Stocks).
+- **Integrated QR Code System**: Unique user-specific QR codes accessible via the profile screen, facilitating easy identification and integration with the Growfico ecosystem.
+- **Advanced Navigation Flow**: Custom-built animated loading screens for login (`ProcessNav`) and logout (`ReleaseNav`) sequences, plus a robust error handling navigation (`ErrorNav`).
+- **Real-Time Data Management**: Powered by **Redux-Saga** for complex asynchronous side effects (API, Auth, Products, Stocks, QR Codes).
 - **Modern UI Architecture**: Built with a focus on aesthetics, utilizing custom **Poppins** typography and a rich library of reusable components.
 
 ---
 
-## 🛠 Tech Stack
+## Tech Stack
 
 ### Core Framework
 - **React Native (v0.83.1)**: Leveraging the latest features for a high-performance cross-platform experience.
@@ -25,35 +26,36 @@
 ### State Management & Side Effects
 - **Redux & React-Redux**: Centralized state management for global application data.
 - **Redux-Saga**: Handling complex asynchronous operations like authentication flows and multi-endpoint data fetching.
+- **Redux-Persist**: Ensures state persistence across app restarts.
 - **AuthContext**: Custom context provider for managing session-wide authentication states.
 
 ### Navigation
 - **React Navigation (v7)**: 
   - **Stack Navigation**: Modularized stacks for Auth, Main, and specialized flows.
   - **Bottom Tabs**: Intuitive primary navigation for core app features.
-  - **Custom Flow Controllers**: specialized navigators for processing states and errors.
+  - **Custom Flow Controllers**: Specialized navigators for processing states and errors.
 
 ### Backend & Infrastructure
 - **Firebase**: Powering authentication services.
-- **Symfony (PHP)**: RESTful API backend (managed via Docker) for product, stock, and user data.
+- **RESTful API backend**: Managed via Docker for product, stock, user, and QR code data.
 - **Google Sign-In**: Seamless third-party authentication integration.
 
 ### UI & UX Components
 - **React Native Elements**: High-quality UI primitives.
-- **Vector Icons**: Comprehensive iconography support.
+- **Vector Icons**: Comprehensive iconography support via `react-native-vector-icons`.
 - **Custom Typography**: Integrated Poppins font family (Thin to Black).
-- **Interactive Modals**: Enhanced user feedback using `react-native-modal`.
+- **Interactive Modals**: Enhanced user feedback using custom modal components.
 
 ---
 
-## 📂 Project Structure
+## Project Structure
 
 ```text
 src/
 ├── App/                # Core Redux Logic
 │   ├── actions.ts      # Action creators and type definitions
-│   ├── api/            # API service layers (Auth, Products, etc.)
-│   ├── reducers/       # State reducers (Auth, Root)
+│   ├── api/            # API service layers (Auth, Products, QR Codes, etc.)
+│   ├── reducers/       # State reducers (Auth, Products, etc.)
 │   └── sagas/          # Side effect handlers (Redux-Saga)
 ├── assets/             # Static Assets
 │   ├── fonts/          # Custom Poppins Font Family
@@ -72,7 +74,8 @@ src/
 │   ├── auth/           # Login & Registration screens
 │   ├── HomeScreen.tsx  # Landing dashboard
 │   ├── ProductScreen   # Marketplace & Product details
-│   └── ProfileScreen   # User settings & Profile management
+│   ├── ProfileScreen   # User settings, Profile management & QR Code
+│   └── CoursesScreen   # Educational content showcase
 └── utils/              # System Utilities
     ├── AuthContext.tsx # Authentication state provider
     ├── image.ts        # Centralized image mapping
@@ -81,7 +84,7 @@ src/
 
 ---
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
 - [Node.js](https://nodejs.org/) (>= 20)
@@ -117,7 +120,7 @@ src/
 - **Run on Android:**
   ```bash
   npm run android
-  ```p
+  ```
 
 - **Run on iOS:**
   ```bash
@@ -126,9 +129,9 @@ src/
 
 ---
 
-## 🔗 API Integration
+## API Integration
 
-The application communicates with a Symfony-based REST API for dynamic content.
+The application communicates with a REST API for dynamic content.
 - **Base URL**: `http://127.0.0.1:8000/api`
 - **Protected Endpoints**:
     - `POST /login`: JWT authentication.
@@ -136,10 +139,12 @@ The application communicates with a Symfony-based REST API for dynamic content.
     - `GET /products`: Real-time gardening catalog.
     - `GET /stocks`: Inventory tracking.
     - `GET /users`: Profile data retrieval.
+    - `GET /user_qr_codes`: User-specific QR code retrieval.
+    - `GET /courses`: Gardening courses and tutorials.
 
 ---
 
-## 🎨 Branding
+## Branding
 
 Growfico features a nature-inspired design system:
 - **Primary Color Palette**: Shades of Emerald and Forest Green.
@@ -148,7 +153,7 @@ Growfico features a nature-inspired design system:
 
 ---
 
-## 📜 License
+## License
 
 This project is private and intended for educational and developmental purposes.
 
