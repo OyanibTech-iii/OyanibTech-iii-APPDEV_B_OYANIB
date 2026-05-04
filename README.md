@@ -1,9 +1,10 @@
 # Growfico - Your Digital Gardening Companion
+**Growfico** is a sophisticated React Native application designed to empower gardening enthusiasts. Whether you're a beginner looking for courses or an experienced gardener seeking quality products, Growfico provides a seamless, high-performance platform to manage and transform your green spaces.
+
 | LOGIN | REGISTER |
 |-------|----------|
 | <img width="120" height="400" alt="LOGIN" src="https://github.com/user-attachments/assets/48e04145-b750-4676-a830-77f672e14a95" /> | <img width="120" height="400" alt="REGISTER" src="https://github.com/user-attachments/assets/45de14cc-ac09-4ccc-b211-caad34be8022" /> |
 
-**Growfico** is a sophisticated React Native application designed to empower gardening enthusiasts. Whether you're a beginner looking for courses or an experienced gardener seeking quality products, Growfico provides a seamless, high-performance platform to manage and transform your green spaces.
 
 ---
 
