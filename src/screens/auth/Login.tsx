@@ -29,7 +29,7 @@ const Login = () => {
   }>({ title: '', message: '', type: 'error' });
 
   // --- CONTEXT & REDUX ---
-  const { login, setIsProcessing } = useAuth();
+  const { setIsProcessing } = useAuth();
 
   const dispatch = useDispatch();
 
@@ -94,10 +94,6 @@ const Login = () => {
           if (modalContent.type === 'success' && data) {
             setIsProcessing?.(true); 
             setTimeout(() => {
-              const userToLogin = data.user || data.data?.user;
-              if (userToLogin) {
-                login?.(userToLogin);
-              }
               setIsProcessing?.(false);
             }, 2500);
           }

@@ -10,7 +10,6 @@
     "test": "jest"
   },
   "dependencies": {
-    "@react-native-async-storage/async-storage": "^3.0.1",
     "@react-native-community/checkbox": "^0.5.20",
     "@react-native-firebase/app": "^24.0.0",
     "@react-native-google-signin/google-signin": "^16.1.2",
@@ -29,7 +28,6 @@
     "react-native-vector-icons": "^10.3.0",
     "react-redux": "^9.2.0",
     "redux": "^5.0.1",
-    "redux-persist": "^6.0.0",
     "redux-saga": "^1.4.2"
   },
   "devDependencies": {

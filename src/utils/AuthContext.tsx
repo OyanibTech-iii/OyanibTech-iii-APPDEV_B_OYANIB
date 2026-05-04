@@ -1,8 +1,8 @@
 import React, { createContext, useState, useContext, ReactNode } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { LOGIN_RESET } from '../App/actions';
 
-import { User } from './types';
+import { User, RootState } from './types';
 
 interface AuthContextType {
   isLoggedIn: boolean;
@@ -31,14 +31,18 @@ interface AuthProviderProps {
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const dispatch = useDispatch();
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [user, setUser] = useState<User | null>(null); 
+  
+  // Get auth state from Redux
+  const { isLoggedIn, data } = useSelector((state: RootState) => state.auth);
+  const user = data?.user || data?.data?.user || null;
+
   const [isProcessing, setIsProcessing] = useState(false);
   const [isReleasing, setIsReleasing] = useState(false);
 
   const login = (userData: User) => {
-    setUser(userData);
-    setIsLoggedIn(true);
+    // Note: login is now mostly handled by Redux actions, 
+    // but we keep this for compatibility if needed.
+    // In the new flow, USER_LOGIN_COMPLETED sets the user.
   };
 
   const logout = () => {
@@ -46,8 +50,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     dispatch({ type: LOGIN_RESET });
 
     setTimeout(() => {
-      setUser(null);
-      setIsLoggedIn(false);
       setIsReleasing(false);
     }, 1500); 
   };

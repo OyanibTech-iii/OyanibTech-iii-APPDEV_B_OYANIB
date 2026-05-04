@@ -8,7 +8,7 @@ const sagaMiddleware = createSagaMiddleware();
 
 // Combine Reducers
 const rootReducer = combineReducers({
-  auth: auth, 
+  auth: auth,
 });
 
 export default () => {

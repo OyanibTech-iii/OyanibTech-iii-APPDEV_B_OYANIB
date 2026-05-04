@@ -17,8 +17,8 @@ export default () => {
   const dispatch = useDispatch();
   const isDarkMode = useColorScheme() === 'dark';
 
-  const { isError, errorMessage } = useSelector((state: RootState) => state.auth);
-  const { isLoggedIn, isProcessing, isReleasing } = useAuth();
+  const { isError, errorMessage, isLoggedIn: isAuthLoggedIn } = useSelector((state: RootState) => state.auth);
+  const { isProcessing, isReleasing } = useAuth();
   
   const handleRetry = () => {
     dispatch(resetLogin()); 
@@ -45,7 +45,7 @@ export default () => {
         <ReleaseNav />
       ) : isProcessing ? (
         <ProcessNav />
-      ) : isLoggedIn ? (
+      ) : isAuthLoggedIn ? (
         <MainNav />
       ) : (
         <AuthNav />

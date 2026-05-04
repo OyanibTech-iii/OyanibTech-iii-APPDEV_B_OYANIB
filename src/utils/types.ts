@@ -76,6 +76,7 @@ export interface QrCode {
 export interface AuthState {
   data: AuthResponse | null; 
   token: string | null;
+  isLoggedIn: boolean;
   isLoading: boolean;
   isError: boolean;
   errorMessage: string;

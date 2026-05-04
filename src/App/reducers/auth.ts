@@ -33,6 +33,7 @@ import {
 const INITIAL_STATE: AuthState = {
   data: null,
   token: null,
+  isLoggedIn: false,
   isLoading: false,
   isError: false,
   errorMessage: '',
@@ -115,6 +116,7 @@ export default function reducer(state = INITIAL_STATE, action: AuthAction): Auth
         ...state,
         data: null,
         token: null,
+        isLoggedIn: false,
         isLoading: true,
         isError: false,
         errorMessage: '',
@@ -129,6 +131,7 @@ export default function reducer(state = INITIAL_STATE, action: AuthAction): Auth
           payload?.token ??
           payload?.data?.token ??
           null,
+        isLoggedIn: true,
         isLoading: false,
         isError: false,
       };
