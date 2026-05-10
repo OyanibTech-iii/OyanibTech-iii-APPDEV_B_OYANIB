@@ -18,6 +18,7 @@ const App = () => {
     GoogleSignin.configure({
       webClientId: '1059016108118-ra4ljvtgf8q8etespns2bpf3b4ekqut1.apps.googleusercontent.com',
       offlineAccess: true,
+      forceCodeForRefreshToken: true,
     });
   }, []);
 

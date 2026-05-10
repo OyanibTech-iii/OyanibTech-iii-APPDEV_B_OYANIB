@@ -102,7 +102,7 @@ export function* userGoogleLoginAsync(): SagaIterator {
     } else {
       const errorMessage =
         error instanceof Error ? error.message : 'Google login failed';
-      yield put({ type: USER_LOGIN_ERROR, payload: errorMessage });
+      yield put({ type: USER_LOGIN_ERROR, payload: `${errorMessage} (Code: ${googleError.code || 'unknown'})` });
     }
     console.error('Saga Google Login Error:', error);
   }
