@@ -7,9 +7,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1059016108118:android:537513a2590d3fc32373f7",
+        "mobilesdk_app_id": "1:1059016108118:android:4ec3b872277557a92373f7",
         "android_client_info": {
-          "package_name": "com.appdevsectionb"
+          "package_name": "com.growfico.app"
         }
       },
       "oauth_client": [
