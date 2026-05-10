@@ -64,7 +64,6 @@ interface AuthAction {
 }
 
 export default function reducer(state = INITIAL_STATE, action: AuthAction): AuthState {
-  console.log(action.type);
   switch (action.type) {
 
     case GET_PRODUCTS_REQUEST:
