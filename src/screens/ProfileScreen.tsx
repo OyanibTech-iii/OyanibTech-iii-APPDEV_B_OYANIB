@@ -1,22 +1,25 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState, useContext } from 'react';
 import { Image, Text, View, TouchableOpacity, ScrollView, Modal, Pressable, ActivityIndicator } from 'react-native';
-import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
+import { BottomTabBarHeightContext } from '@react-navigation/bottom-tabs';
+import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import { GET_USERS_REQUEST, GET_QR_CODES_REQUEST } from '../App/actions';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import CustomFooter from '../components/CustomFooter';
 import CustomMeatball from '../components/CustomMeatball';
 import { useAuth } from '../utils/AuthContext';
-import { RootState, User, QrCode } from '../utils/types';
+import { RootState, User, QrCode, NavigationProp } from '../utils/types';
+import routes from '../utils/routes';
 
 const ProfileScreen = () => {
+  const navigation = useNavigation<NavigationProp>();
   const dispatch = useDispatch();
   const { user } = useAuth();
   const token = useSelector((state: RootState) => state.auth.token);
   const usersSlice = useSelector((state: RootState) => state.auth.users);
   const qrCodes = useSelector((state: RootState) => state.auth.qrCodes);
   const qrCodesLoading = useSelector((state: RootState) => state.auth.qrCodesLoading);
-  const tabBarHeight = useBottomTabBarHeight();
+  const tabBarHeight = useContext(BottomTabBarHeightContext) || 0;
 
   const [qrModalVisible, setQrModalVisible] = useState(false);
 
@@ -112,13 +115,18 @@ const ProfileScreen = () => {
 
   return (
     <View style={{ flex: 1, marginBottom: 70 }}>   
-      <CustomMeatball />
+      <CustomMeatball 
+        onQrPress={() => setQrModalVisible(true)} 
+        onHomePress={() => navigation.navigate('TabNav', { screen: routes.HOME })}
+        onCartPress={() => navigation.navigate('TabNav', { screen: routes.CART })}
+        onCoursesPress={() => navigation.navigate('TabNav', { screen: routes.COURSES })}
+      />
       <ScrollView contentContainerStyle={{ paddingBottom: tabBarHeight + 20 }}>
         <View style={{ alignItems: 'center', marginTop: 10 }}>
           <View style={{ position: 'relative' }}>
             <View style={{
-              width: 100,
-              height: 100,
+              width: 80,
+              height: 80,
               borderRadius: 65,
               backgroundColor: '#f8fafc',
               padding: 3,
@@ -131,13 +139,13 @@ const ProfileScreen = () => {
                 <Image
                   source={{ uri: avatarUri }}
                   resizeMode='cover'
-                  style={{ width: 100, height: 100, borderRadius: 50 }}
+                  style={{ width: 80, height: 80, borderRadius: 50 }}
                 />
               ) : (
                 <View
                   style={{
-                    width: 100,
-                    height: 100,
+                    width: 80,
+                    height: 80,
                     borderRadius: 50,
                     backgroundColor: '#1f6908',
                     justifyContent: 'center',
@@ -150,25 +158,9 @@ const ProfileScreen = () => {
                 </View>
               )}
             </View>
-            <TouchableOpacity 
-              onPress={() => setQrModalVisible(true)}
-              style={{
-                position: 'absolute',
-                bottom: 0,
-                right: 0,
-                backgroundColor: '#ffffff',
-                padding: 5,
-                borderRadius: 15,
-                borderWidth: 1,
-                borderColor: '#e2e8f0',
-                elevation: 2
-              }}
-            >
-              <Ionicons name="qr-code-outline" size={20} color="#1f6908" />
-            </TouchableOpacity>
           </View>
-          <Text style={{ color: '#044b31', fontSize: 20, fontFamily: 'Poppins-Regular', marginTop: 15 }}>{fullName}</Text>
-          <Text style={{ color: '#64748b', fontSize: 12, fontFamily: 'Poppins-Regular' }}>{roleLabel}</Text>
+          <Text style={{ color: '#06450b', fontSize: 14, fontFamily: 'Poppins-Regular', marginTop: 15 }}>{fullName}</Text>
+          <Text style={{ color: '#06450b', fontSize: 12, fontFamily: 'Poppins-Regular' }}>{roleLabel}</Text>
         </View>
 
         <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', marginTop: 30, paddingHorizontal: 10 }}>
@@ -190,28 +182,28 @@ const ProfileScreen = () => {
               }}
             >
               <Ionicons name={item.icon} size={20} color="#1e293b" />
-              <Text style={{ color: '#1e293b', fontSize: 12, marginTop: 8, fontWeight: '500' }}>{item.label}</Text>
+              <Text style={{ color: '#1e293b', fontSize: 12, marginTop: 8}}>{item.label}</Text>
             </TouchableOpacity>
           ))}
         </View>
 
         <View style={{ flex: 1, backgroundColor: '#ffffff', margin: 20, borderRadius: 12, padding: 20 }}>
           <View style={{ marginBottom: 20 }}>
-            <Text style={{ color: '#022e12', fontSize: 16 }}>
+            <Text style={{ color: '#022e12', fontSize: 14 }}>
               {currentUser.phone || currentUser.mobile || 'N/A'}
             </Text>
             <Text style={{ color: "#64748b", fontSize: 12, marginTop: 4 }}>Mobile</Text>
           </View>
 
           <View style={{ marginBottom: 20 }}>
-            <Text style={{ color: '#022e12', fontSize: 16 }}>
+            <Text style={{ color: '#022e12', fontSize: 14 }}>
               {currentUser.bio || 'No bio available'}
             </Text>
             <Text style={{ color: "#64748b", fontSize: 12, marginTop: 4 }}>Bio</Text>
           </View>
 
           <View>
-            <Text style={{ color: '#022e12', fontSize: 16 }}>
+            <Text style={{ color: '#022e12', fontSize: 14 }}>
               {currentUser.username || currentUser.email || 'N/A'}
             </Text>
             <Text style={{ color: "#64748b", fontSize: 12, marginTop: 4 }}>Email</Text>

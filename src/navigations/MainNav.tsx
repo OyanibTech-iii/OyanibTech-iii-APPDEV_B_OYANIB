@@ -7,6 +7,7 @@ import Product from '../screens/ProductScreen';
 import TabNav from './TabNav';
 import Courses from '../screens/CoursesScreen';
 import ErrorNav from './ErrorNav';
+import EnrollNav from './EnrollNav';
 
 const Stack = createStackNavigator();
 
@@ -22,6 +23,7 @@ const MainNavigation = () => {
       <Stack.Screen name={ROUTES.PROFILE} component={Profile} />
       <Stack.Screen name={ROUTES.PRODUCT} component={Product} />
       <Stack.Screen name={ROUTES.COURSES} component={Courses} />
+      <Stack.Screen name={ROUTES.ENROLL_NAV} component={EnrollNav} />
     </Stack.Navigator>
   );
 };

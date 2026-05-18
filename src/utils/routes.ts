@@ -7,7 +7,9 @@ export default {
   HOME: 'Home',
   PROFILE: 'Profile',
   PRODUCT: 'Product',
+  CART: 'Cart',
   TERMS_POLICY: 'TermsPolicy',
   COURSES: 'Courses',
   ERRORNAV: 'ErrorNav',
+  ENROLL_NAV: 'EnrollNav',
 };

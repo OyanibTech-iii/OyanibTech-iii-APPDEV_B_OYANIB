@@ -1,21 +1,29 @@
 import React, { useEffect, useState, useMemo } from 'react';
-import { FlatList, View, ActivityIndicator, Text } from 'react-native'; 
+import { FlatList, View, ActivityIndicator, Text, Modal, Pressable, TouchableOpacity, TextStyle } from 'react-native'; 
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigation } from '@react-navigation/native';
 import { GET_PRODUCTS_REQUEST, GET_STOCKS_REQUEST } from '../App/actions';
 import FilterChips from '../components/FilterChips';
 import ProductCard from '../components/ProductCard';
 
-import { RootState, Product, Stock } from '../utils/types';
+import { RootState, Product, Stock, NavigationProp } from '../utils/types';
+import CustomHeader from '../components/CustomHeader';
+import routes from '../utils/routes';
 
 const EMPTY_ARRAY: Product[] = [];
 
 const ProductScreen = () => {
     const dispatch = useDispatch();
+    const navigation = useNavigation<NavigationProp>();
 
     const token = useSelector((state: RootState) => state.auth.token);
     const productsSlice = useSelector((state: RootState) => state.auth.products);
     const stocksSlice = useSelector((state: RootState) => state.auth.stocks);
     const productsLoading = useSelector((state: RootState) => state.auth.productsLoading);
+
+    const [category, setCategory] = useState('All Products');
+    const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+    const [modalVisible, setModalVisible] = useState(false);
 
     const normalizeList = (slice: Product[] | Stock[] | Product | Stock) => {
         if (Array.isArray(slice)) return slice;
@@ -29,8 +37,6 @@ const ProductScreen = () => {
     const allStocks: Stock[] = useMemo(() => normalizeList(stocksSlice) as Stock[], [stocksSlice]);
     // Keep product list usable even if stocks request is delayed/failed.
     const isLoading = productsLoading;
-
-    const [category, setCategory] = useState('All Products');
 
     useEffect(() => {
         if (token) {
@@ -75,6 +81,19 @@ const ProductScreen = () => {
         });
     }, [category, allProducts, stockTypeByProductId]);
 
+    const handleAddPress = (product: Product) => {
+        setSelectedProduct(product);
+        setModalVisible(true);
+    };
+
+    const handleConfirmAdd = () => {
+        setModalVisible(false);
+        if (selectedProduct) {
+            dispatch({ type: 'ADD_TO_CART', payload: selectedProduct });
+        }
+        navigation.navigate('TabNav', { screen: routes.CART });
+    };
+
     if (isLoading) {
         return (
             <View style={{ flex: 1, justifyContent: 'center' }}>
@@ -85,6 +104,8 @@ const ProductScreen = () => {
 
     return (
         <View style={{ flex: 1, backgroundColor: '#fdfdfd' }}>
+            <CustomHeader showWelcome />
+            
             <FilterChips
                 stocks={allStocks}
                 activeCategory={category}
@@ -93,7 +114,7 @@ const ProductScreen = () => {
 
             <FlatList
                 data={filteredData}
-                renderItem={({ item }) => <ProductCard item={item} />}
+                renderItem={({ item }) => <ProductCard item={item} onAddPress={handleAddPress} />}
                 numColumns={2}
                 keyExtractor={item => item.id.toString()}
                 contentContainerStyle={{
@@ -107,6 +128,41 @@ const ProductScreen = () => {
                     </View>
                 )}
             />
+
+            <Modal
+                transparent={true}
+                visible={modalVisible}
+                animationType="fade"
+                onRequestClose={() => setModalVisible(false)}
+            >
+                <Pressable 
+                    onPress={() => setModalVisible(false)}
+                    style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.5)', justifyContent: 'center', alignItems: 'center' }}
+                >
+                    <View style={{ width: '80%', backgroundColor: 'white', borderRadius: 12, padding: 20, alignItems: 'center' }}>
+                        <Text style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 10, color: '#0f3a03', fontFamily: 'Poppins-Bold' }}>Add to Cart</Text>
+                        <Text style={{ color: '#64748b', marginBottom: 20, textAlign: 'center', fontFamily: 'Poppins-Regular' }}>
+                            Are you sure you want to add "{selectedProduct?.name}" to your cart?
+                        </Text>
+                        
+                        <View style={{ flexDirection: 'row', gap: 10 }}>
+                            <TouchableOpacity 
+                                onPress={() => setModalVisible(false)}
+                                style={{ flex: 1, padding: 12, backgroundColor: '#e2e8f0', borderRadius: 8, alignItems: 'center' }}
+                            >
+                                <Text style={{ fontWeight: '600', color: '#475569', fontFamily: 'Poppins-Medium' }}>Cancel</Text>
+                            </TouchableOpacity>
+                            
+                            <TouchableOpacity 
+                                onPress={handleConfirmAdd}
+                                style={{ flex: 1, padding: 12, backgroundColor: '#16a34a', borderRadius: 8, alignItems: 'center' }}
+                            >
+                                <Text style={{ fontWeight: '600', color: '#fff', fontFamily: 'Poppins-Medium' }}>Yes, Add</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </Pressable>
+            </Modal>
         </View>
     );
 };

@@ -27,7 +27,10 @@ import {
   GET_COURSES_FAILURE,
   GET_QR_CODES_REQUEST,
   GET_QR_CODES_SUCCESS,
-  GET_QR_CODES_FAILURE
+  GET_QR_CODES_FAILURE,
+  ADD_TO_CART,
+  REMOVE_FROM_CART,
+  CLEAR_CART
 } from '../actions';
 
 const INITIAL_STATE: AuthState = {
@@ -56,15 +59,43 @@ const INITIAL_STATE: AuthState = {
   qrCodes: [],
   qrCodesLoading: false,
   qrCodesError: null,
+  cart: [],
 };
 
 interface AuthAction {
   type: string;
-  payload?: AuthResponse | RegisterResponse | Product[] | Stock[] | User[] | Course[] | QrCode[] | string | null;
+  payload?: AuthResponse | RegisterResponse | Product[] | Stock[] | User[] | Course[] | QrCode[] | Product | number | string | null;
 }
 
 export default function reducer(state = INITIAL_STATE, action: AuthAction): AuthState {
   switch (action.type) {
+
+    case ADD_TO_CART: {
+      const product = action.payload as Product;
+      const existingItem = state.cart.find(item => item.id === product.id);
+      
+      if (existingItem) {
+        return {
+          ...state,
+          cart: state.cart.map(item => 
+            item.id === product.id 
+              ? { ...item, quantity: (item.quantity || 1) + 1 } 
+              : item
+          )
+        };
+      }
+      
+      return { 
+        ...state, 
+        cart: [...state.cart, { ...product, quantity: 1 }] 
+      };
+    }
+
+    case REMOVE_FROM_CART:
+      return { ...state, cart: state.cart.filter(item => item.id !== (action.payload as number)) };
+
+    case CLEAR_CART:
+      return { ...state, cart: [] };
 
     case GET_PRODUCTS_REQUEST:
       return { ...state, productsLoading: true, productsError: null };

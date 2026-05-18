@@ -32,6 +32,7 @@ export interface Product {
   stockType?: string;
   isAvailable?: boolean;
   currentStockQuantity?: number;
+  quantity?: number;
   data?: Product[];
   results?: Product[];
   'hydra:member'?: Product[];
@@ -99,6 +100,7 @@ export interface AuthState {
   qrCodes: QrCode[];
   qrCodesLoading: boolean;
   qrCodesError: string | null;
+  cart: Product[];
 }
 
 export interface RootState {
@@ -126,9 +128,12 @@ export type RootStackParamList = {
   Home: undefined;
   Profile: undefined;
   Product: { id: number } | undefined;
+  Cart: undefined;
   TermsPolicy: undefined;
   Courses: undefined;
   ErrorNav: undefined;
+  EnrollNav: undefined;
+  TabNav: { screen: string; params?: any } | undefined;
 };
 
 export type NavigationProp = StackNavigationProp<RootStackParamList>;

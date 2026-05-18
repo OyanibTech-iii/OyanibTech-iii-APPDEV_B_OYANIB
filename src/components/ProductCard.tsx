@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react';
-import { View, Text, Image, Dimensions } from 'react-native';
+import { View, Text, Image, Dimensions, TouchableOpacity } from 'react-native';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 import { Product } from '../utils/types';
 
@@ -7,9 +8,10 @@ const { width } = Dimensions.get('window');
 
 interface ProductCardProps {
     item: Product;
+    onAddPress?: (item: Product) => void;
 }
 
-const ProductCard: React.FC<ProductCardProps> = ({ item }) => {
+const ProductCard: React.FC<ProductCardProps> = ({ item, onAddPress }) => {
     // Correctly mapping to Symfony entity properties
     const isOutOfStock = !item.isAvailable; // Based on Product.php
 
@@ -61,7 +63,19 @@ const ProductCard: React.FC<ProductCardProps> = ({ item }) => {
                 <Text style={{ fontSize: 11, color: '#888', marginBottom: 8 }} numberOfLines={1}>{item.description}</Text>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                     <Text style={{ fontSize: 10, color: '#999' }}>Qty: {item.currentStockQuantity || 0}</Text>
-                    <Text style={{ fontSize: 11, fontWeight: 'bold', color: '#0f3a03' }}>Details →</Text>
+                    <TouchableOpacity 
+                        onPress={() => onAddPress && onAddPress(item)}
+                        style={{ 
+                            backgroundColor: '#0f3a03', 
+                            borderRadius: 15, 
+                            width: 30, 
+                            height: 30, 
+                            justifyContent: 'center', 
+                            alignItems: 'center' 
+                        }}
+                    >
+                        <Icon name="add" size={22} color="#FFF" />
+                    </TouchableOpacity>
                 </View>
             </View>
         </View>

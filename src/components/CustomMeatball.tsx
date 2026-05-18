@@ -3,7 +3,14 @@ import { View, Text, TouchableOpacity, Modal, Pressable } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useAuth } from '../utils/AuthContext';
 
-const CustomMeatball = () => {
+interface CustomMeatballProps {
+    onQrPress?: () => void;
+    onHomePress?: () => void;
+    onCartPress?: () => void;
+    onCoursesPress?: () => void;
+}
+
+const CustomMeatball = ({ onQrPress, onHomePress, onCartPress, onCoursesPress }: CustomMeatballProps) => {
     const { logout } = useAuth();
     const [menuVisible, setMenuVisible] = useState(false);
     const [modalVisible, setModalVisible] = useState(false);
@@ -14,9 +21,18 @@ const CustomMeatball = () => {
         logout();
     };
 
+    const handlePress = (callback?: () => void) => {
+        if (callback) {
+            callback();
+        }
+        setMenuVisible(false);
+    };
+
     return (
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 20, zIndex: 10, marginBottom: 20, paddingTop: 10 }}>
-            <Ionicons name="grid-outline" size={24} color="#1e293b" />
+            <TouchableOpacity onPress={onQrPress}>
+                <Ionicons name="qr-code-outline" size={24} color="#1e293b" />
+            </TouchableOpacity>
 
             <View style={{ position: 'relative' }}>
                 <TouchableOpacity onPress={() => setMenuVisible(!menuVisible)}>
@@ -31,7 +47,7 @@ const CustomMeatball = () => {
                         backgroundColor: '#f1f5f9',
                         padding: 10,
                         borderRadius: 8,
-                        width: 140,
+                        width: 160,
                         elevation: 5,
                         shadowColor: '#000',
                         shadowOffset: { width: 0, height: 2 },
@@ -40,11 +56,37 @@ const CustomMeatball = () => {
                         zIndex: 100,
                     }}>
                         <TouchableOpacity 
-                            onPress={() => setModalVisible(true)}
-                            style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', }}
+                            onPress={() => handlePress(onHomePress)}
+                            style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}
                         >
-                            <Text style={{ color: 'grey', }}>Logout</Text>
-                            <Ionicons name="power-outline" size={16} color="#64748b" />
+                            <Text style={{ color: '#475569', fontSize: 13 }}>Home</Text>
+                            <Ionicons name="home-outline" size={16} color="#64748b" />
+                        </TouchableOpacity>
+
+                        <TouchableOpacity 
+                            onPress={() => handlePress(onCartPress)}
+                            style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}
+                        >
+                            <Text style={{ color: '#475569', fontSize: 13 }}>Cart</Text>
+                            <Ionicons name="cart-outline" size={16} color="#64748b" />
+                        </TouchableOpacity>
+
+                        <TouchableOpacity 
+                            onPress={() => handlePress(onCoursesPress)}
+                            style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}
+                        >
+                            <Text style={{ color: '#475569', fontSize: 13 }}>Courses</Text>
+                            <Ionicons name="book-outline" size={16} color="#64748b" />
+                        </TouchableOpacity>
+
+                        <View style={{ height: 1, backgroundColor: '#e2e8f0', marginVertical: 4 }} />
+
+                        <TouchableOpacity 
+                            onPress={() => setModalVisible(true)}
+                            style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: 4 }}
+                        >
+                            <Text style={{ color: '#ef4444', fontSize: 13 }}>Logout</Text>
+                            <Ionicons name="power-outline" size={16} color="#ef4444" />
                         </TouchableOpacity>
                     </View>
                 )}

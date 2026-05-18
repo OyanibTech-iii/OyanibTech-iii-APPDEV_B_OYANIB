@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, FlatList, Image } from 'react-native';
-import { IMG } from '../utils'; // Importing your centralized image object
+import { IMG } from '../utils'; 
 
 const CustomCarousel = () => {  
   const ITEM_WIDTH = 300;
@@ -34,7 +34,7 @@ const CustomCarousel = () => {
                 height: '100%',
                 borderRadius: 10,
                 backgroundColor: '#e1e1e1',
-                opacity: 0.9,
+                // opacity: 0.9,
               }}
               resizeMode="cover"
             />

@@ -3,6 +3,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { Platform } from 'react-native';
 import Home from '../screens/HomeScreen';
+import Cart from '../screens/CartScreen';
 import Profile from '../screens/ProfileScreen';
 import Product from '../screens/ProductScreen';
 import Courses from '../screens/CoursesScreen';
@@ -25,11 +26,11 @@ function TabNav() {
                     if (route.name === 'Home') {
                         iconName = focused ? 'home' : 'home-outline';
                     } else if (route.name === 'Products') {
-                        iconName = focused ? 'cart' : 'cart-outline';
+                        iconName = focused ? 'bag' : 'bag-outline';
                     } else if (route.name === 'Courses') {
                         iconName = focused ? 'book' : 'book-outline';
-                    } else if (route.name === 'Profile') {
-                        iconName = focused ? 'person' : 'person-outline';
+                    } else if (route.name === 'Cart') {
+                        iconName = focused ? 'cart' : 'cart-outline';
                     }
                     return <Ionicons name={iconName} size={20} color={color} />;
                 },
@@ -60,7 +61,7 @@ function TabNav() {
             <Tab.Screen name="Home" component={Home} />
             <Tab.Screen name="Products" component={Product} />
             <Tab.Screen name="Courses" component={Courses} />
-            <Tab.Screen name="Profile" component={Profile} />
+            <Tab.Screen name="Cart" component={Cart} />
         </Tab.Navigator>
     );
 }
